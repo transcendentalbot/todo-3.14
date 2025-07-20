@@ -27,3 +27,6 @@ Thumbs.db
 
 # Claude commands (local development)
 .claude/
+
+# Vercel
+.vercel/
