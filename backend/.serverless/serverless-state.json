@@ -1,0 +1,2645 @@
+{
+  "service": {
+    "service": "wellness-companion",
+    "serviceObject": {
+      "name": "wellness-companion"
+    },
+    "provider": {
+      "name": "aws",
+      "runtime": "nodejs18.x",
+      "region": "us-east-1",
+      "stage": "dev",
+      "environment": {
+        "STAGE": "dev",
+        "JWT_SECRET": "dev-secret-change-in-prod",
+        "USERS_TABLE": "wellness-companion-users-dev",
+        "TRACKING_TABLE": "wellness-companion-tracking-dev",
+        "REMINDERS_TABLE": "wellness-companion-reminders-dev",
+        "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+        "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
+        "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9"
+      },
+      "iam": {
+        "role": {
+          "statements": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "dynamodb:GetItem",
+                "dynamodb:PutItem",
+                "dynamodb:UpdateItem",
+                "dynamodb:DeleteItem",
+                "dynamodb:Query",
+                "dynamodb:Scan"
+              ],
+              "Resource": [
+                "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-users-dev",
+                "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-tracking-dev",
+                "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-reminders-dev",
+                "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-users-dev/index/*",
+                "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-tracking-dev/index/*"
+              ]
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:PutObject",
+                "s3:GetObject",
+                "s3:DeleteObject"
+              ],
+              "Resource": "arn:aws:s3:::wellness-companion-photos-dev/*"
+            },
+            {
+              "Effect": "Allow",
+              "Action": [
+                "cognito-idp:AdminCreateUser",
+                "cognito-idp:AdminGetUser",
+                "cognito-idp:AdminUpdateUserAttributes"
+              ],
+              "Resource": "arn:aws:cognito-idp:us-east-1:*:userpool/*"
+            }
+          ]
+        }
+      },
+      "versionFunctions": true,
+      "compiledCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "ServerlessDeploymentBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+              "BucketEncryption": {
+                "ServerSideEncryptionConfiguration": [
+                  {
+                    "ServerSideEncryptionByDefault": {
+                      "SSEAlgorithm": "AES256"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "RegisterLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/wellness-companion-dev-register"
+            }
+          },
+          "LoginLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/wellness-companion-dev-login"
+            }
+          },
+          "ProfileLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/wellness-companion-dev-profile"
+            }
+          },
+          "CheckinLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/wellness-companion-dev-checkin"
+            }
+          },
+          "PhotoLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/wellness-companion-dev-photo"
+            }
+          },
+          "WeightLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/wellness-companion-dev-weight"
+            }
+          },
+          "SupplementLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/wellness-companion-dev-supplement"
+            }
+          },
+          "AuthorizerFuncLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/wellness-companion-dev-authorizerFunc"
+            }
+          },
+          "IamRoleLambdaExecution": {
+            "Type": "AWS::IAM::Role",
+            "Properties": {
+              "AssumeRolePolicyDocument": {
+                "Version": "2012-10-17",
+                "Statement": [
+                  {
+                    "Effect": "Allow",
+                    "Principal": {
+                      "Service": [
+                        "lambda.amazonaws.com"
+                      ]
+                    },
+                    "Action": [
+                      "sts:AssumeRole"
+                    ]
+                  }
+                ]
+              },
+              "Policies": [
+                {
+                  "PolicyName": {
+                    "Fn::Join": [
+                      "-",
+                      [
+                        "wellness-companion",
+                        "dev",
+                        "lambda"
+                      ]
+                    ]
+                  },
+                  "PolicyDocument": {
+                    "Version": "2012-10-17",
+                    "Statement": [
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:CreateLogStream",
+                          "logs:CreateLogGroup",
+                          "logs:TagResource"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/wellness-companion-dev*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "Effect": "Allow",
+                        "Action": [
+                          "logs:PutLogEvents"
+                        ],
+                        "Resource": [
+                          {
+                            "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/wellness-companion-dev*:*:*"
+                          }
+                        ]
+                      },
+                      {
+                        "$ref": "$[\"service\"][\"provider\"][\"iam\"][\"role\"][\"statements\"][0]"
+                      },
+                      {
+                        "$ref": "$[\"service\"][\"provider\"][\"iam\"][\"role\"][\"statements\"][1]"
+                      },
+                      {
+                        "$ref": "$[\"service\"][\"provider\"][\"iam\"][\"role\"][\"statements\"][2]"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "Path": "/",
+              "RoleName": {
+                "Fn::Join": [
+                  "-",
+                  [
+                    "wellness-companion",
+                    "dev",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    "lambdaRole"
+                  ]
+                ]
+              }
+            }
+          },
+          "RegisterLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/wellness-companion/dev/1753047106136-2025-07-20T21:31:46.136Z/wellness-companion.zip"
+              },
+              "Handler": "functions/auth/register.handler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "wellness-companion-dev-register",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "STAGE": "dev",
+                  "JWT_SECRET": "dev-secret-change-in-prod",
+                  "USERS_TABLE": "wellness-companion-users-dev",
+                  "TRACKING_TABLE": "wellness-companion-tracking-dev",
+                  "REMINDERS_TABLE": "wellness-companion-reminders-dev",
+                  "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+                  "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
+                  "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "RegisterLogGroup"
+            ]
+          },
+          "LoginLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/wellness-companion/dev/1753047106136-2025-07-20T21:31:46.136Z/wellness-companion.zip"
+              },
+              "Handler": "functions/auth/login.handler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "wellness-companion-dev-login",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "STAGE": "dev",
+                  "JWT_SECRET": "dev-secret-change-in-prod",
+                  "USERS_TABLE": "wellness-companion-users-dev",
+                  "TRACKING_TABLE": "wellness-companion-tracking-dev",
+                  "REMINDERS_TABLE": "wellness-companion-reminders-dev",
+                  "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+                  "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
+                  "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "LoginLogGroup"
+            ]
+          },
+          "ProfileLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/wellness-companion/dev/1753047106136-2025-07-20T21:31:46.136Z/wellness-companion.zip"
+              },
+              "Handler": "functions/auth/profile.handler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "wellness-companion-dev-profile",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "STAGE": "dev",
+                  "JWT_SECRET": "dev-secret-change-in-prod",
+                  "USERS_TABLE": "wellness-companion-users-dev",
+                  "TRACKING_TABLE": "wellness-companion-tracking-dev",
+                  "REMINDERS_TABLE": "wellness-companion-reminders-dev",
+                  "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+                  "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
+                  "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "ProfileLogGroup"
+            ]
+          },
+          "CheckinLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/wellness-companion/dev/1753047106136-2025-07-20T21:31:46.136Z/wellness-companion.zip"
+              },
+              "Handler": "functions/tracking/checkin.handler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "wellness-companion-dev-checkin",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "STAGE": "dev",
+                  "JWT_SECRET": "dev-secret-change-in-prod",
+                  "USERS_TABLE": "wellness-companion-users-dev",
+                  "TRACKING_TABLE": "wellness-companion-tracking-dev",
+                  "REMINDERS_TABLE": "wellness-companion-reminders-dev",
+                  "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+                  "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
+                  "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "CheckinLogGroup"
+            ]
+          },
+          "PhotoLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/wellness-companion/dev/1753047106136-2025-07-20T21:31:46.136Z/wellness-companion.zip"
+              },
+              "Handler": "functions/tracking/photo.handler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "wellness-companion-dev-photo",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "STAGE": "dev",
+                  "JWT_SECRET": "dev-secret-change-in-prod",
+                  "USERS_TABLE": "wellness-companion-users-dev",
+                  "TRACKING_TABLE": "wellness-companion-tracking-dev",
+                  "REMINDERS_TABLE": "wellness-companion-reminders-dev",
+                  "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+                  "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
+                  "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "PhotoLogGroup"
+            ]
+          },
+          "WeightLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/wellness-companion/dev/1753047106136-2025-07-20T21:31:46.136Z/wellness-companion.zip"
+              },
+              "Handler": "functions/tracking/weight.handler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "wellness-companion-dev-weight",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "STAGE": "dev",
+                  "JWT_SECRET": "dev-secret-change-in-prod",
+                  "USERS_TABLE": "wellness-companion-users-dev",
+                  "TRACKING_TABLE": "wellness-companion-tracking-dev",
+                  "REMINDERS_TABLE": "wellness-companion-reminders-dev",
+                  "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+                  "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
+                  "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "WeightLogGroup"
+            ]
+          },
+          "SupplementLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/wellness-companion/dev/1753047106136-2025-07-20T21:31:46.136Z/wellness-companion.zip"
+              },
+              "Handler": "functions/tracking/supplement.handler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "wellness-companion-dev-supplement",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "STAGE": "dev",
+                  "JWT_SECRET": "dev-secret-change-in-prod",
+                  "USERS_TABLE": "wellness-companion-users-dev",
+                  "TRACKING_TABLE": "wellness-companion-tracking-dev",
+                  "REMINDERS_TABLE": "wellness-companion-reminders-dev",
+                  "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+                  "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
+                  "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "SupplementLogGroup"
+            ]
+          },
+          "AuthorizerFuncLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/wellness-companion/dev/1753047106136-2025-07-20T21:31:46.136Z/wellness-companion.zip"
+              },
+              "Handler": "functions/auth/authorizer.handler",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "wellness-companion-dev-authorizerFunc",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "STAGE": "dev",
+                  "JWT_SECRET": "dev-secret-change-in-prod",
+                  "USERS_TABLE": "wellness-companion-users-dev",
+                  "TRACKING_TABLE": "wellness-companion-tracking-dev",
+                  "REMINDERS_TABLE": "wellness-companion-reminders-dev",
+                  "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+                  "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
+                  "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "AuthorizerFuncLogGroup"
+            ]
+          },
+          "RegisterLambdaVersionwkLvdzwgk7q4WDXxHNpISJ54nsC7tUtpMNAcegaVJ0": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "RegisterLambdaFunction"
+              },
+              "CodeSha256": "h78ZeQDEoBSxzbz1Z2Bn+7HfFpw/46o8XpvuqQMf+MI="
+            }
+          },
+          "LoginLambdaVersionxH27hUSw74KQNQW5cv1SL0k9uTSGXx6gj0hLBOEzPMw": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "LoginLambdaFunction"
+              },
+              "CodeSha256": "h78ZeQDEoBSxzbz1Z2Bn+7HfFpw/46o8XpvuqQMf+MI="
+            }
+          },
+          "ProfileLambdaVersionGOwOJeQsnb2lCUmoaYbNgZnvKQu19Y2gbSJQt8ilY": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "ProfileLambdaFunction"
+              },
+              "CodeSha256": "h78ZeQDEoBSxzbz1Z2Bn+7HfFpw/46o8XpvuqQMf+MI="
+            }
+          },
+          "CheckinLambdaVersionpg6IJSS653Q96GvGgggZiMyhAGCe6ymdWZKewwwfK8": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "CheckinLambdaFunction"
+              },
+              "CodeSha256": "h78ZeQDEoBSxzbz1Z2Bn+7HfFpw/46o8XpvuqQMf+MI="
+            }
+          },
+          "PhotoLambdaVersionBmXfb9UfQURSDjbfYavUa6dQF8EjoTwtIJf4aGZIq1Y": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "PhotoLambdaFunction"
+              },
+              "CodeSha256": "h78ZeQDEoBSxzbz1Z2Bn+7HfFpw/46o8XpvuqQMf+MI="
+            }
+          },
+          "WeightLambdaVersionAlwxQovG8v5LGYVXzwYdpj0ZzdYDfvWwhohJarU2TWI": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "WeightLambdaFunction"
+              },
+              "CodeSha256": "h78ZeQDEoBSxzbz1Z2Bn+7HfFpw/46o8XpvuqQMf+MI="
+            }
+          },
+          "SupplementLambdaVersionao0jrRE7RiW3up4KDcsHDoHJ38LoxPCcjavjWMDtIo": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "SupplementLambdaFunction"
+              },
+              "CodeSha256": "h78ZeQDEoBSxzbz1Z2Bn+7HfFpw/46o8XpvuqQMf+MI="
+            }
+          },
+          "AuthorizerFuncLambdaVersionlUgX7PAbr9S7qm2mrCDvvy3rTxLzwKAN0wY1axLgYAE": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "AuthorizerFuncLambdaFunction"
+              },
+              "CodeSha256": "h78ZeQDEoBSxzbz1Z2Bn+7HfFpw/46o8XpvuqQMf+MI="
+            }
+          },
+          "ApiGatewayRestApi": {
+            "Type": "AWS::ApiGateway::RestApi",
+            "Properties": {
+              "Name": "dev-wellness-companion",
+              "EndpointConfiguration": {
+                "Types": [
+                  "EDGE"
+                ]
+              },
+              "Policy": ""
+            }
+          },
+          "ApiGatewayResourceAuth": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "auth",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceAuthRegister": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceAuth"
+              },
+              "PathPart": "register",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceAuthLogin": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceAuth"
+              },
+              "PathPart": "login",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceUser": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "user",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceUserProfile": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceUser"
+              },
+              "PathPart": "profile",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceTracking": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Fn::GetAtt": [
+                  "ApiGatewayRestApi",
+                  "RootResourceId"
+                ]
+              },
+              "PathPart": "tracking",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceTrackingCheckin": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceTracking"
+              },
+              "PathPart": "checkin",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceTrackingPhoto": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceTracking"
+              },
+              "PathPart": "photo",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceTrackingWeight": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceTracking"
+              },
+              "PathPart": "weight",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayResourceTrackingSupplement": {
+            "Type": "AWS::ApiGateway::Resource",
+            "Properties": {
+              "ParentId": {
+                "Ref": "ApiGatewayResourceTracking"
+              },
+              "PathPart": "supplement",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodAuthRegisterOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceAuthRegister"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodAuthLoginOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceAuthLogin"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodUserProfileOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceUserProfile"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodTrackingCheckinOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceTrackingCheckin"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodTrackingPhotoOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceTrackingPhoto"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodTrackingWeightOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceTrackingWeight"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodTrackingSupplementOptions": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "AuthorizationType": "NONE",
+              "HttpMethod": "OPTIONS",
+              "MethodResponses": [
+                {
+                  "StatusCode": "200",
+                  "ResponseParameters": {
+                    "method.response.header.Access-Control-Allow-Origin": true,
+                    "method.response.header.Access-Control-Allow-Headers": true,
+                    "method.response.header.Access-Control-Allow-Methods": true
+                  },
+                  "ResponseModels": {}
+                }
+              ],
+              "RequestParameters": {},
+              "Integration": {
+                "Type": "MOCK",
+                "RequestTemplates": {
+                  "application/json": "{statusCode:200}"
+                },
+                "ContentHandling": "CONVERT_TO_TEXT",
+                "IntegrationResponses": [
+                  {
+                    "StatusCode": "200",
+                    "ResponseParameters": {
+                      "method.response.header.Access-Control-Allow-Origin": "'*'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+                    },
+                    "ResponseTemplates": {
+                      "application/json": ""
+                    }
+                  }
+                ]
+              },
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceTrackingSupplement"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "ApiGatewayMethodAuthRegisterPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceAuthRegister"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "RegisterLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "RegisterLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayMethodAuthLoginPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceAuthLogin"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "NONE",
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "LoginLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "LoginLambdaPermissionApiGateway"
+            ]
+          },
+          "ApiGatewayMethodUserProfileGet": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "GET",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceUserProfile"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "CUSTOM",
+              "AuthorizerId": {
+                "Ref": "AuthorizerFuncApiGatewayAuthorizer"
+              },
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "ProfileLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "AuthorizerFuncApiGatewayAuthorizer"
+            ]
+          },
+          "ApiGatewayMethodTrackingCheckinPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceTrackingCheckin"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "CUSTOM",
+              "AuthorizerId": {
+                "Ref": "AuthorizerFuncApiGatewayAuthorizer"
+              },
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "CheckinLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "AuthorizerFuncApiGatewayAuthorizer"
+            ]
+          },
+          "ApiGatewayMethodTrackingPhotoPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceTrackingPhoto"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "CUSTOM",
+              "AuthorizerId": {
+                "Ref": "AuthorizerFuncApiGatewayAuthorizer"
+              },
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "PhotoLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "AuthorizerFuncApiGatewayAuthorizer"
+            ]
+          },
+          "ApiGatewayMethodTrackingWeightPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceTrackingWeight"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "CUSTOM",
+              "AuthorizerId": {
+                "Ref": "AuthorizerFuncApiGatewayAuthorizer"
+              },
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "WeightLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "AuthorizerFuncApiGatewayAuthorizer"
+            ]
+          },
+          "ApiGatewayMethodTrackingSupplementPost": {
+            "Type": "AWS::ApiGateway::Method",
+            "Properties": {
+              "HttpMethod": "POST",
+              "RequestParameters": {},
+              "ResourceId": {
+                "Ref": "ApiGatewayResourceTrackingSupplement"
+              },
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "ApiKeyRequired": false,
+              "AuthorizationType": "CUSTOM",
+              "AuthorizerId": {
+                "Ref": "AuthorizerFuncApiGatewayAuthorizer"
+              },
+              "Integration": {
+                "IntegrationHttpMethod": "POST",
+                "Type": "AWS_PROXY",
+                "Uri": {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:",
+                      {
+                        "Ref": "AWS::Partition"
+                      },
+                      ":apigateway:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":lambda:path/2015-03-31/functions/",
+                      {
+                        "Fn::GetAtt": [
+                          "SupplementLambdaFunction",
+                          "Arn"
+                        ]
+                      },
+                      "/invocations"
+                    ]
+                  ]
+                }
+              },
+              "MethodResponses": []
+            },
+            "DependsOn": [
+              "AuthorizerFuncApiGatewayAuthorizer"
+            ]
+          },
+          "AuthorizerFuncApiGatewayAuthorizer": {
+            "Type": "AWS::ApiGateway::Authorizer",
+            "Properties": {
+              "AuthorizerResultTtlInSeconds": 300,
+              "IdentitySource": "method.request.header.Authorization",
+              "Name": "authorizerFunc",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "AuthorizerUri": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":apigateway:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":lambda:path/2015-03-31/functions/",
+                    {
+                      "Fn::GetAtt": [
+                        "AuthorizerFuncLambdaFunction",
+                        "Arn"
+                      ]
+                    },
+                    "/invocations"
+                  ]
+                ]
+              },
+              "Type": "REQUEST"
+            }
+          },
+          "ApiGatewayDeployment1753047057068": {
+            "Type": "AWS::ApiGateway::Deployment",
+            "Properties": {
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "StageName": "dev"
+            },
+            "DependsOn": [
+              "ApiGatewayMethodAuthRegisterOptions",
+              "ApiGatewayMethodAuthLoginOptions",
+              "ApiGatewayMethodUserProfileOptions",
+              "ApiGatewayMethodTrackingCheckinOptions",
+              "ApiGatewayMethodTrackingPhotoOptions",
+              "ApiGatewayMethodTrackingWeightOptions",
+              "ApiGatewayMethodTrackingSupplementOptions",
+              "ApiGatewayMethodAuthRegisterPost",
+              "ApiGatewayMethodAuthLoginPost",
+              "ApiGatewayMethodUserProfileGet",
+              "ApiGatewayMethodTrackingCheckinPost",
+              "ApiGatewayMethodTrackingPhotoPost",
+              "ApiGatewayMethodTrackingWeightPost",
+              "ApiGatewayMethodTrackingSupplementPost"
+            ]
+          },
+          "RegisterLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "RegisterLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "LoginLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "LoginLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "ProfileLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "ProfileLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "AuthorizerFuncLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "AuthorizerFuncLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "CheckinLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "CheckinLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "PhotoLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "PhotoLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "WeightLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "WeightLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "SupplementLambdaPermissionApiGateway": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "SupplementLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "apigateway.amazonaws.com",
+              "SourceArn": {
+                "Fn::Join": [
+                  "",
+                  [
+                    "arn:",
+                    {
+                      "Ref": "AWS::Partition"
+                    },
+                    ":execute-api:",
+                    {
+                      "Ref": "AWS::Region"
+                    },
+                    ":",
+                    {
+                      "Ref": "AWS::AccountId"
+                    },
+                    ":",
+                    {
+                      "Ref": "ApiGatewayRestApi"
+                    },
+                    "/*/*"
+                  ]
+                ]
+              }
+            }
+          },
+          "UsersTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "wellness-companion-users-dev",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "userId",
+                  "AttributeType": "S"
+                },
+                {
+                  "AttributeName": "email",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "userId",
+                  "KeyType": "HASH"
+                }
+              ],
+              "GlobalSecondaryIndexes": [
+                {
+                  "IndexName": "email-index",
+                  "KeySchema": [
+                    {
+                      "AttributeName": "email",
+                      "KeyType": "HASH"
+                    }
+                  ],
+                  "Projection": {
+                    "ProjectionType": "ALL"
+                  }
+                }
+              ],
+              "BillingMode": "PAY_PER_REQUEST"
+            }
+          },
+          "TrackingTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "wellness-companion-tracking-dev",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "userId",
+                  "AttributeType": "S"
+                },
+                {
+                  "AttributeName": "timestamp",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "userId",
+                  "KeyType": "HASH"
+                },
+                {
+                  "AttributeName": "timestamp",
+                  "KeyType": "RANGE"
+                }
+              ],
+              "BillingMode": "PAY_PER_REQUEST"
+            }
+          },
+          "RemindersTable": {
+            "Type": "AWS::DynamoDB::Table",
+            "Properties": {
+              "TableName": "wellness-companion-reminders-dev",
+              "AttributeDefinitions": [
+                {
+                  "AttributeName": "userId",
+                  "AttributeType": "S"
+                },
+                {
+                  "AttributeName": "reminderId",
+                  "AttributeType": "S"
+                }
+              ],
+              "KeySchema": [
+                {
+                  "AttributeName": "userId",
+                  "KeyType": "HASH"
+                },
+                {
+                  "AttributeName": "reminderId",
+                  "KeyType": "RANGE"
+                }
+              ],
+              "BillingMode": "PAY_PER_REQUEST"
+            }
+          },
+          "PhotosBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+              "BucketName": "wellness-companion-photos-dev-194722432945",
+              "CorsConfiguration": {
+                "CorsRules": [
+                  {
+                    "AllowedOrigins": [
+                      "*"
+                    ],
+                    "AllowedHeaders": [
+                      "*"
+                    ],
+                    "AllowedMethods": [
+                      "GET",
+                      "PUT",
+                      "POST",
+                      "DELETE"
+                    ],
+                    "MaxAge": 3000
+                  }
+                ]
+              },
+              "LifecycleConfiguration": {
+                "Rules": [
+                  {
+                    "Id": "DeleteOldPhotos",
+                    "Status": "Enabled",
+                    "ExpirationInDays": 90
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": {
+              "Ref": "ServerlessDeploymentBucket"
+            },
+            "Export": {
+              "Name": "sls-wellness-companion-dev-ServerlessDeploymentBucketName"
+            }
+          },
+          "RegisterLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "RegisterLambdaVersionwkLvdzwgk7q4WDXxHNpISJ54nsC7tUtpMNAcegaVJ0"
+            },
+            "Export": {
+              "Name": "sls-wellness-companion-dev-RegisterLambdaFunctionQualifiedArn"
+            }
+          },
+          "LoginLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "LoginLambdaVersionxH27hUSw74KQNQW5cv1SL0k9uTSGXx6gj0hLBOEzPMw"
+            },
+            "Export": {
+              "Name": "sls-wellness-companion-dev-LoginLambdaFunctionQualifiedArn"
+            }
+          },
+          "ProfileLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "ProfileLambdaVersionGOwOJeQsnb2lCUmoaYbNgZnvKQu19Y2gbSJQt8ilY"
+            },
+            "Export": {
+              "Name": "sls-wellness-companion-dev-ProfileLambdaFunctionQualifiedArn"
+            }
+          },
+          "CheckinLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "CheckinLambdaVersionpg6IJSS653Q96GvGgggZiMyhAGCe6ymdWZKewwwfK8"
+            },
+            "Export": {
+              "Name": "sls-wellness-companion-dev-CheckinLambdaFunctionQualifiedArn"
+            }
+          },
+          "PhotoLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "PhotoLambdaVersionBmXfb9UfQURSDjbfYavUa6dQF8EjoTwtIJf4aGZIq1Y"
+            },
+            "Export": {
+              "Name": "sls-wellness-companion-dev-PhotoLambdaFunctionQualifiedArn"
+            }
+          },
+          "WeightLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "WeightLambdaVersionAlwxQovG8v5LGYVXzwYdpj0ZzdYDfvWwhohJarU2TWI"
+            },
+            "Export": {
+              "Name": "sls-wellness-companion-dev-WeightLambdaFunctionQualifiedArn"
+            }
+          },
+          "SupplementLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "SupplementLambdaVersionao0jrRE7RiW3up4KDcsHDoHJ38LoxPCcjavjWMDtIo"
+            },
+            "Export": {
+              "Name": "sls-wellness-companion-dev-SupplementLambdaFunctionQualifiedArn"
+            }
+          },
+          "AuthorizerFuncLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "AuthorizerFuncLambdaVersionlUgX7PAbr9S7qm2mrCDvvy3rTxLzwKAN0wY1axLgYAE"
+            },
+            "Export": {
+              "Name": "sls-wellness-companion-dev-AuthorizerFuncLambdaFunctionQualifiedArn"
+            }
+          },
+          "ServiceEndpoint": {
+            "Description": "URL of the service endpoint",
+            "Value": {
+              "Fn::Join": [
+                "",
+                [
+                  "https://",
+                  {
+                    "Ref": "ApiGatewayRestApi"
+                  },
+                  ".execute-api.",
+                  {
+                    "Ref": "AWS::Region"
+                  },
+                  ".",
+                  {
+                    "Ref": "AWS::URLSuffix"
+                  },
+                  "/dev"
+                ]
+              ]
+            },
+            "Export": {
+              "Name": "sls-wellness-companion-dev-ServiceEndpoint"
+            }
+          }
+        }
+      },
+      "coreCloudFormationTemplate": {
+        "AWSTemplateFormatVersion": "2010-09-09",
+        "Description": "The AWS CloudFormation template for this Serverless application",
+        "Resources": {
+          "ServerlessDeploymentBucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+              "BucketEncryption": {
+                "ServerSideEncryptionConfiguration": [
+                  {
+                    "ServerSideEncryptionByDefault": {
+                      "SSEAlgorithm": "AES256"
+                    }
+                  }
+                ]
+              }
+            }
+          },
+          "ServerlessDeploymentBucketPolicy": {
+            "Type": "AWS::S3::BucketPolicy",
+            "Properties": {
+              "Bucket": {
+                "Ref": "ServerlessDeploymentBucket"
+              },
+              "PolicyDocument": {
+                "Statement": [
+                  {
+                    "Action": "s3:*",
+                    "Effect": "Deny",
+                    "Principal": "*",
+                    "Resource": [
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            },
+                            "/*"
+                          ]
+                        ]
+                      },
+                      {
+                        "Fn::Join": [
+                          "",
+                          [
+                            "arn:",
+                            {
+                              "Ref": "AWS::Partition"
+                            },
+                            ":s3:::",
+                            {
+                              "Ref": "ServerlessDeploymentBucket"
+                            }
+                          ]
+                        ]
+                      }
+                    ],
+                    "Condition": {
+                      "Bool": {
+                        "aws:SecureTransport": false
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "Outputs": {
+          "ServerlessDeploymentBucketName": {
+            "Value": {
+              "Ref": "ServerlessDeploymentBucket"
+            }
+          }
+        }
+      },
+      "vpc": {}
+    },
+    "plugins": [
+      "serverless-plugin-typescript"
+    ],
+    "pluginsData": {},
+    "functions": {
+      "register": {
+        "handler": "functions/auth/register.handler",
+        "events": [
+          {
+            "http": {
+              "path": "auth/register",
+              "method": "post",
+              "cors": {
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "X-Amzn-Trace-Id"
+                ],
+                "allowCredentials": false
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "wellness-companion-dev-register",
+        "package": {
+          "exclude": [
+            "node_modules/serverless-plugin-typescript"
+          ],
+          "include": [],
+          "patterns": []
+        },
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs18.x",
+        "vpc": {},
+        "versionLogicalId": "RegisterLambdaVersionwkLvdzwgk7q4WDXxHNpISJ54nsC7tUtpMNAcegaVJ0"
+      },
+      "login": {
+        "handler": "functions/auth/login.handler",
+        "events": [
+          {
+            "http": {
+              "path": "auth/login",
+              "method": "post",
+              "cors": {
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "X-Amzn-Trace-Id"
+                ],
+                "allowCredentials": false
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "wellness-companion-dev-login",
+        "package": {
+          "exclude": [
+            "node_modules/serverless-plugin-typescript"
+          ],
+          "include": [],
+          "patterns": []
+        },
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs18.x",
+        "vpc": {},
+        "versionLogicalId": "LoginLambdaVersionxH27hUSw74KQNQW5cv1SL0k9uTSGXx6gj0hLBOEzPMw"
+      },
+      "profile": {
+        "handler": "functions/auth/profile.handler",
+        "events": [
+          {
+            "http": {
+              "path": "user/profile",
+              "method": "get",
+              "cors": {
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "GET"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "X-Amzn-Trace-Id"
+                ],
+                "allowCredentials": false
+              },
+              "authorizer": {
+                "type": "request",
+                "name": "authorizerFunc",
+                "arn": {
+                  "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"AuthorizerFuncLambdaPermissionApiGateway\"][\"Properties\"][\"FunctionName\"]"
+                },
+                "managedExternally": false,
+                "resultTtlInSeconds": 300,
+                "identitySource": "method.request.header.Authorization",
+                "claims": []
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "wellness-companion-dev-profile",
+        "package": {
+          "exclude": [
+            "node_modules/serverless-plugin-typescript"
+          ],
+          "include": [],
+          "patterns": []
+        },
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs18.x",
+        "vpc": {},
+        "versionLogicalId": "ProfileLambdaVersionGOwOJeQsnb2lCUmoaYbNgZnvKQu19Y2gbSJQt8ilY"
+      },
+      "checkin": {
+        "handler": "functions/tracking/checkin.handler",
+        "events": [
+          {
+            "http": {
+              "path": "tracking/checkin",
+              "method": "post",
+              "cors": {
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "X-Amzn-Trace-Id"
+                ],
+                "allowCredentials": false
+              },
+              "authorizer": {
+                "type": "request",
+                "name": "authorizerFunc",
+                "arn": {
+                  "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"AuthorizerFuncLambdaPermissionApiGateway\"][\"Properties\"][\"FunctionName\"]"
+                },
+                "managedExternally": false,
+                "resultTtlInSeconds": 300,
+                "identitySource": "method.request.header.Authorization",
+                "claims": []
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "wellness-companion-dev-checkin",
+        "package": {
+          "exclude": [
+            "node_modules/serverless-plugin-typescript"
+          ],
+          "include": [],
+          "patterns": []
+        },
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs18.x",
+        "vpc": {},
+        "versionLogicalId": "CheckinLambdaVersionpg6IJSS653Q96GvGgggZiMyhAGCe6ymdWZKewwwfK8"
+      },
+      "photo": {
+        "handler": "functions/tracking/photo.handler",
+        "events": [
+          {
+            "http": {
+              "path": "tracking/photo",
+              "method": "post",
+              "cors": {
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "X-Amzn-Trace-Id"
+                ],
+                "allowCredentials": false
+              },
+              "authorizer": {
+                "type": "request",
+                "name": "authorizerFunc",
+                "arn": {
+                  "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"AuthorizerFuncLambdaPermissionApiGateway\"][\"Properties\"][\"FunctionName\"]"
+                },
+                "managedExternally": false,
+                "resultTtlInSeconds": 300,
+                "identitySource": "method.request.header.Authorization",
+                "claims": []
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "wellness-companion-dev-photo",
+        "package": {
+          "exclude": [
+            "node_modules/serverless-plugin-typescript"
+          ],
+          "include": [],
+          "patterns": []
+        },
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs18.x",
+        "vpc": {},
+        "versionLogicalId": "PhotoLambdaVersionBmXfb9UfQURSDjbfYavUa6dQF8EjoTwtIJf4aGZIq1Y"
+      },
+      "weight": {
+        "handler": "functions/tracking/weight.handler",
+        "events": [
+          {
+            "http": {
+              "path": "tracking/weight",
+              "method": "post",
+              "cors": {
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "X-Amzn-Trace-Id"
+                ],
+                "allowCredentials": false
+              },
+              "authorizer": {
+                "type": "request",
+                "name": "authorizerFunc",
+                "arn": {
+                  "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"AuthorizerFuncLambdaPermissionApiGateway\"][\"Properties\"][\"FunctionName\"]"
+                },
+                "managedExternally": false,
+                "resultTtlInSeconds": 300,
+                "identitySource": "method.request.header.Authorization",
+                "claims": []
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "wellness-companion-dev-weight",
+        "package": {
+          "exclude": [
+            "node_modules/serverless-plugin-typescript"
+          ],
+          "include": [],
+          "patterns": []
+        },
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs18.x",
+        "vpc": {},
+        "versionLogicalId": "WeightLambdaVersionAlwxQovG8v5LGYVXzwYdpj0ZzdYDfvWwhohJarU2TWI"
+      },
+      "supplement": {
+        "handler": "functions/tracking/supplement.handler",
+        "events": [
+          {
+            "http": {
+              "path": "tracking/supplement",
+              "method": "post",
+              "cors": {
+                "origin": "*",
+                "methods": [
+                  "OPTIONS",
+                  "POST"
+                ],
+                "headers": [
+                  "Content-Type",
+                  "X-Amz-Date",
+                  "Authorization",
+                  "X-Api-Key",
+                  "X-Amz-Security-Token",
+                  "X-Amz-User-Agent",
+                  "X-Amzn-Trace-Id"
+                ],
+                "allowCredentials": false
+              },
+              "authorizer": {
+                "type": "request",
+                "name": "authorizerFunc",
+                "arn": {
+                  "$ref": "$[\"service\"][\"provider\"][\"compiledCloudFormationTemplate\"][\"Resources\"][\"AuthorizerFuncLambdaPermissionApiGateway\"][\"Properties\"][\"FunctionName\"]"
+                },
+                "managedExternally": false,
+                "resultTtlInSeconds": 300,
+                "identitySource": "method.request.header.Authorization",
+                "claims": []
+              },
+              "integration": "AWS_PROXY"
+            }
+          }
+        ],
+        "name": "wellness-companion-dev-supplement",
+        "package": {
+          "exclude": [
+            "node_modules/serverless-plugin-typescript"
+          ],
+          "include": [],
+          "patterns": []
+        },
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs18.x",
+        "vpc": {},
+        "versionLogicalId": "SupplementLambdaVersionao0jrRE7RiW3up4KDcsHDoHJ38LoxPCcjavjWMDtIo"
+      },
+      "authorizerFunc": {
+        "handler": "functions/auth/authorizer.handler",
+        "events": [],
+        "name": "wellness-companion-dev-authorizerFunc",
+        "package": {
+          "exclude": [
+            "node_modules/serverless-plugin-typescript"
+          ],
+          "include": [],
+          "patterns": []
+        },
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs18.x",
+        "vpc": {},
+        "versionLogicalId": "AuthorizerFuncLambdaVersionlUgX7PAbr9S7qm2mrCDvvy3rTxLzwKAN0wY1axLgYAE"
+      }
+    },
+    "resources": {
+      "Resources": {
+        "UsersTable": {
+          "Type": "AWS::DynamoDB::Table",
+          "Properties": {
+            "TableName": "wellness-companion-users-dev",
+            "AttributeDefinitions": [
+              {
+                "AttributeName": "userId",
+                "AttributeType": "S"
+              },
+              {
+                "AttributeName": "email",
+                "AttributeType": "S"
+              }
+            ],
+            "KeySchema": [
+              {
+                "AttributeName": "userId",
+                "KeyType": "HASH"
+              }
+            ],
+            "GlobalSecondaryIndexes": [
+              {
+                "IndexName": "email-index",
+                "KeySchema": [
+                  {
+                    "AttributeName": "email",
+                    "KeyType": "HASH"
+                  }
+                ],
+                "Projection": {
+                  "ProjectionType": "ALL"
+                }
+              }
+            ],
+            "BillingMode": "PAY_PER_REQUEST"
+          }
+        },
+        "TrackingTable": {
+          "Type": "AWS::DynamoDB::Table",
+          "Properties": {
+            "TableName": "wellness-companion-tracking-dev",
+            "AttributeDefinitions": [
+              {
+                "AttributeName": "userId",
+                "AttributeType": "S"
+              },
+              {
+                "AttributeName": "timestamp",
+                "AttributeType": "S"
+              }
+            ],
+            "KeySchema": [
+              {
+                "AttributeName": "userId",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "timestamp",
+                "KeyType": "RANGE"
+              }
+            ],
+            "BillingMode": "PAY_PER_REQUEST"
+          }
+        },
+        "RemindersTable": {
+          "Type": "AWS::DynamoDB::Table",
+          "Properties": {
+            "TableName": "wellness-companion-reminders-dev",
+            "AttributeDefinitions": [
+              {
+                "AttributeName": "userId",
+                "AttributeType": "S"
+              },
+              {
+                "AttributeName": "reminderId",
+                "AttributeType": "S"
+              }
+            ],
+            "KeySchema": [
+              {
+                "AttributeName": "userId",
+                "KeyType": "HASH"
+              },
+              {
+                "AttributeName": "reminderId",
+                "KeyType": "RANGE"
+              }
+            ],
+            "BillingMode": "PAY_PER_REQUEST"
+          }
+        },
+        "PhotosBucket": {
+          "Type": "AWS::S3::Bucket",
+          "Properties": {
+            "BucketName": "wellness-companion-photos-dev-194722432945",
+            "CorsConfiguration": {
+              "CorsRules": [
+                {
+                  "AllowedOrigins": [
+                    "*"
+                  ],
+                  "AllowedHeaders": [
+                    "*"
+                  ],
+                  "AllowedMethods": [
+                    "GET",
+                    "PUT",
+                    "POST",
+                    "DELETE"
+                  ],
+                  "MaxAge": 3000
+                }
+              ]
+            },
+            "LifecycleConfiguration": {
+              "Rules": [
+                {
+                  "Id": "DeleteOldPhotos",
+                  "Status": "Enabled",
+                  "ExpirationInDays": 90
+                }
+              ]
+            }
+          }
+        }
+      },
+      "Outputs": {}
+    },
+    "configValidationMode": "warn",
+    "serviceFilename": "serverless.yml",
+    "initialServerlessConfig": {
+      "service": "wellness-companion",
+      "frameworkVersion": "3",
+      "provider": {
+        "$ref": "$[\"service\"][\"provider\"]"
+      },
+      "plugins": {
+        "$ref": "$[\"service\"][\"plugins\"]"
+      },
+      "functions": {
+        "$ref": "$[\"service\"][\"functions\"]"
+      },
+      "resources": {
+        "$ref": "$[\"service\"][\"resources\"]"
+      }
+    },
+    "layers": {},
+    "isDashboardMonitoringPreconfigured": false,
+    "artifact": "/Users/jay/todo-3.14/backend/.build/.serverless/wellness-companion.zip"
+  },
+  "package": {
+    "artifactDirectoryName": "serverless/wellness-companion/dev/1753047106136-2025-07-20T21:31:46.136Z",
+    "artifact": "wellness-companion.zip"
+  }
+}

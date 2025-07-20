@@ -1,0 +1,90 @@
+name: Deploy Wellness Companion
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  deploy-backend:
+    name: Deploy Backend to AWS
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install dependencies
+        working-directory: ./backend
+        run: npm install
+
+      - name: Install Serverless Framework
+        run: npm install -g serverless
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Deploy to AWS
+        working-directory: ./backend
+        run: serverless deploy --stage ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }}
+        
+      - name: Get API endpoint
+        id: api-endpoint
+        working-directory: ./backend
+        run: |
+          API_URL=$(serverless info --stage ${{ github.ref == 'refs/heads/main' && 'prod' || 'dev' }} --verbose | grep -E "POST.*auth/login" | head -1 | awk '{print $3}' | sed 's|/auth/login||')
+          echo "API_URL=$API_URL" >> $GITHUB_OUTPUT
+
+    outputs:
+      api-url: ${{ steps.api-endpoint.outputs.API_URL }}
+
+  deploy-frontend:
+    name: Deploy Frontend to Vercel
+    needs: deploy-backend
+    runs-on: ubuntu-latest
+    env:
+      VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
+      VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      - name: Install Vercel CLI
+        run: npm install -g vercel
+
+      - name: Pull Vercel Environment Information
+        working-directory: ./frontend
+        run: vercel pull --yes --environment=${{ github.ref == 'refs/heads/main' && 'production' || 'preview' }} --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Build Project
+        working-directory: ./frontend
+        env:
+          VITE_API_URL: ${{ needs.deploy-backend.outputs.api-url }}
+          VITE_COGNITO_USER_POOL_ID: ${{ secrets.COGNITO_USER_POOL_ID }}
+          VITE_COGNITO_CLIENT_ID: ${{ secrets.COGNITO_CLIENT_ID }}
+        run: |
+          echo "Building with API URL: $VITE_API_URL"
+          vercel build ${{ github.ref == 'refs/heads/main' && '--prod' || '' }} --token=${{ secrets.VERCEL_TOKEN }}
+
+      - name: Deploy to Vercel
+        working-directory: ./frontend
+        run: |
+          if [ "${{ github.ref }}" == "refs/heads/main" ]; then
+            vercel deploy --prebuilt --prod --token=${{ secrets.VERCEL_TOKEN }}
+          else
+            vercel deploy --prebuilt --token=${{ secrets.VERCEL_TOKEN }}
+          fi

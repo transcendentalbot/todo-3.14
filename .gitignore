@@ -1,0 +1,29 @@
+# Node modules
+node_modules/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.secrets
+
+# Build outputs
+dist/
+build/
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# AWS credentials
+.aws/
+
+# Claude commands (local development)
+.claude/

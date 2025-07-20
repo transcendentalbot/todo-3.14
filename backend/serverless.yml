@@ -1,0 +1,209 @@
+service: wellness-companion
+
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs18.x
+  region: us-east-1
+  stage: ${opt:stage, 'dev'}
+  environment:
+    STAGE: ${self:provider.stage}
+    JWT_SECRET: ${env:JWT_SECRET, 'dev-secret-change-in-prod'}
+    USERS_TABLE: ${self:service}-users-${self:provider.stage}
+    TRACKING_TABLE: ${self:service}-tracking-${self:provider.stage}
+    REMINDERS_TABLE: ${self:service}-reminders-${self:provider.stage}
+    PHOTOS_BUCKET: ${self:service}-photos-${self:provider.stage}
+    COGNITO_USER_POOL_ID: us-east-1_fTxU26uy4
+    COGNITO_CLIENT_ID: 3i8iauebg4sseeh6qdlstncmh9
+  iam:
+    role:
+      statements:
+        - Effect: Allow
+          Action:
+            - dynamodb:GetItem
+            - dynamodb:PutItem
+            - dynamodb:UpdateItem
+            - dynamodb:DeleteItem
+            - dynamodb:Query
+            - dynamodb:Scan
+          Resource:
+            - arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.USERS_TABLE}
+            - arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.TRACKING_TABLE}
+            - arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.REMINDERS_TABLE}
+            - arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.USERS_TABLE}/index/*
+            - arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.TRACKING_TABLE}/index/*
+        - Effect: Allow
+          Action:
+            - s3:PutObject
+            - s3:GetObject
+            - s3:DeleteObject
+          Resource:
+            - arn:aws:s3:::${self:provider.environment.PHOTOS_BUCKET}/*
+        - Effect: Allow
+          Action:
+            - cognito-idp:AdminCreateUser
+            - cognito-idp:AdminGetUser
+            - cognito-idp:AdminUpdateUserAttributes
+          Resource:
+            - arn:aws:cognito-idp:${aws:region}:*:userpool/*
+
+plugins:
+  - serverless-plugin-typescript
+
+functions:
+  # Auth endpoints
+  register:
+    handler: functions/auth/register.handler
+    events:
+      - http:
+          path: auth/register
+          method: post
+          cors: true
+
+  login:
+    handler: functions/auth/login.handler
+    events:
+      - http:
+          path: auth/login
+          method: post
+          cors: true
+
+  profile:
+    handler: functions/auth/profile.handler
+    events:
+      - http:
+          path: user/profile
+          method: get
+          cors: true
+          authorizer:
+            name: authorizerFunc
+            type: request
+
+  # Tracking endpoints
+  checkin:
+    handler: functions/tracking/checkin.handler
+    events:
+      - http:
+          path: tracking/checkin
+          method: post
+          cors: true
+          authorizer:
+            name: authorizerFunc
+            type: request
+
+  photo:
+    handler: functions/tracking/photo.handler
+    events:
+      - http:
+          path: tracking/photo
+          method: post
+          cors: true
+          authorizer:
+            name: authorizerFunc
+            type: request
+
+  weight:
+    handler: functions/tracking/weight.handler
+    events:
+      - http:
+          path: tracking/weight
+          method: post
+          cors: true
+          authorizer:
+            name: authorizerFunc
+            type: request
+
+  supplement:
+    handler: functions/tracking/supplement.handler
+    events:
+      - http:
+          path: tracking/supplement
+          method: post
+          cors: true
+          authorizer:
+            name: authorizerFunc
+            type: request
+
+  # Authorizer
+  authorizerFunc:
+    handler: functions/auth/authorizer.handler
+
+resources:
+  Resources:
+    # DynamoDB Tables
+    UsersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.USERS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: email
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+        GlobalSecondaryIndexes:
+          - IndexName: email-index
+            KeySchema:
+              - AttributeName: email
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
+        BillingMode: PAY_PER_REQUEST
+
+    TrackingTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.TRACKING_TABLE}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: timestamp
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: timestamp
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+
+    RemindersTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.REMINDERS_TABLE}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: reminderId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: reminderId
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+
+    # S3 Bucket for photos
+    PhotosBucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: ${self:provider.environment.PHOTOS_BUCKET}-${aws:accountId}
+        CorsConfiguration:
+          CorsRules:
+            - AllowedOrigins:
+                - '*'
+              AllowedHeaders:
+                - '*'
+              AllowedMethods:
+                - GET
+                - PUT
+                - POST
+                - DELETE
+              MaxAge: 3000
+        LifecycleConfiguration:
+          Rules:
+            - Id: DeleteOldPhotos
+              Status: Enabled
+              ExpirationInDays: 90
