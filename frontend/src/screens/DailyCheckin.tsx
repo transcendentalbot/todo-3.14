@@ -5,7 +5,6 @@ import VoiceInput from '../components/VoiceInput'
 
 export default function DailyCheckin() {
   const navigate = useNavigate()
-  const [checkinType, setCheckinType] = useState<'morning' | 'evening'>('morning')
   const [mood, setMood] = useState(5)
   const [energy, setEnergy] = useState(5)
   const [voiceNote, setVoiceNote] = useState('')

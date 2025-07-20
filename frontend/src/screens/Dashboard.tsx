@@ -6,7 +6,7 @@ export default function Dashboard() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const [greeting, setGreeting] = useState('')
-  const [streak, setStreak] = useState(0)
+  const [streak] = useState(0)
 
   useEffect(() => {
     const hour = new Date().getHours()
