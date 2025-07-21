@@ -9,7 +9,7 @@
     }
   ],
   "env": {
-    "VITE_API_URL": "https://gmb7o66agi.execute-api.us-east-1.amazonaws.com/dev",
+    "VITE_API_URL": "https://lp3u3xe58k.execute-api.us-east-1.amazonaws.com/prod",
     "VITE_COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
     "VITE_COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9"
   }
