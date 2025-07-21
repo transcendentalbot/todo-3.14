@@ -36,6 +36,25 @@ export const handler: APIGatewayRequestAuthorizerHandler = async (event) => {
     };
   } catch (error) {
     console.error('Authorization error:', error);
-    throw new Error('Unauthorized');
+    
+    // Return explicit deny with CORS headers
+    return {
+      principalId: 'unauthorized',
+      policyDocument: {
+        Version: '2012-10-17',
+        Statement: [
+          {
+            Action: 'execute-api:Invoke',
+            Effect: 'Deny',
+            Resource: event.methodArn
+          }
+        ]
+      },
+      context: {
+        stringKey: 'unauthorized',
+        numberKey: 401,
+        booleanKey: false
+      }
+    };
   }
 };
