@@ -3,6 +3,7 @@ import { useAuth } from '../contexts/AuthContext'
 import { useState, useEffect } from 'react'
 import NotificationPrompt from '../components/NotificationPrompt'
 import NotificationTest from '../components/NotificationTest'
+import TrackingHistory from '../components/TrackingHistory'
 import pushNotificationService from '../services/pushNotifications'
 
 export default function Dashboard() {
@@ -143,6 +144,11 @@ export default function Dashboard() {
         {/* Notification Test Component */}
         <div className="mt-6">
           <NotificationTest />
+        </div>
+
+        {/* Tracking History */}
+        <div className="mt-6">
+          <TrackingHistory />
         </div>
       </main>
       

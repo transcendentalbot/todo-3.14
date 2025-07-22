@@ -146,6 +146,17 @@ functions:
             name: authorizerFunc
             type: request
 
+  history:
+    handler: functions/tracking/history.handler
+    events:
+      - http:
+          path: tracking/history
+          method: get
+          cors: true
+          authorizer:
+            name: authorizerFunc
+            type: request
+
   # Notification Functions
   notificationSubscribe:
     handler: functions/notifications/subscribe.handler

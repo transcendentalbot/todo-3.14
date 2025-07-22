@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import pushNotificationService from '../services/pushNotifications';
 
 export default function NotificationTest() {
   const [isLoading, setIsLoading] = useState(false);
@@ -49,21 +48,27 @@ export default function NotificationTest() {
       // Send notification with a delay to ensure it shows even if browser is focused
       setTimeout(async () => {
         try {
-          await registration.showNotification('🎉 Test Notification', {
+          const options: any = {
             body: 'Your notifications are working! This should appear even if the browser is open.',
             icon: '/pwa-192x192.png',
             badge: '/pwa-192x192.png',
             tag: 'test-notification',
-            requireInteraction: false, // Don't require interaction for test
-            actions: [
-              { action: 'complete', title: '✅ Complete' },
-              { action: 'snooze', title: '⏰ Snooze' }
-            ],
+            requireInteraction: false,
             data: {
               type: 'test',
               timestamp: Date.now()
             }
-          });
+          };
+          
+          // Add actions only if supported
+          if ('actions' in Notification.prototype) {
+            options.actions = [
+              { action: 'complete', title: '✅ Complete' },
+              { action: 'snooze', title: '⏰ Snooze' }
+            ];
+          }
+          
+          await registration.showNotification('🎉 Test Notification', options);
           
           setMessage('✅ Notification sent! It should appear in your notification center.');
           setError('');
