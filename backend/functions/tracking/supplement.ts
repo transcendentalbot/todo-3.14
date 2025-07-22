@@ -1,6 +1,7 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import * as AWS from 'aws-sdk';
 import { createResponse } from '../../utils/response';
+import { EncryptedRequest, isEncryptedRequest, handleEncryptedData } from '../../utils/encryption';
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const TRACKING_TABLE = process.env.TRACKING_TABLE!;
@@ -18,9 +19,27 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       return createResponse(401, { message: 'Unauthorized' });
     }
 
-    const body = JSON.parse(event.body || '{}') as SupplementData;
+    const body = JSON.parse(event.body || '{}') as EncryptedRequest | SupplementData;
     
-    if (typeof body.taken !== 'boolean') {
+    // Handle encrypted data
+    if (isEncryptedRequest(body)) {
+      const item = handleEncryptedData(userId, 'supplement', body);
+      
+      await dynamodb.put({
+        TableName: TRACKING_TABLE,
+        Item: item
+      }).promise();
+
+      return createResponse(201, {
+        message: 'Supplement log recorded successfully',
+        timestamp: item.timestamp
+      });
+    }
+    
+    // Legacy unencrypted path
+    const supplementData = body as SupplementData;
+    
+    if (typeof supplementData.taken !== 'boolean') {
       return createResponse(400, { message: 'taken field is required as boolean' });
     }
 
@@ -31,9 +50,9 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       timestamp,
       type: 'supplement',
       data: {
-        taken: body.taken,
-        supplements: body.supplements || [],
-        note: body.note,
+        taken: supplementData.taken,
+        supplements: supplementData.supplements || [],
+        note: supplementData.note,
         createdAt: timestamp
       }
     };

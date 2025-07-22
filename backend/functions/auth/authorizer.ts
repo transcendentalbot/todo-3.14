@@ -17,6 +17,19 @@ export const handler: APIGatewayRequestAuthorizerHandler = async (event) => {
     
     const decoded = jwt.verify(token, JWT_SECRET) as any;
     
+    // Extract the API Gateway ARN components
+    // Format: arn:aws:execute-api:region:account:api-id/stage/method/resource
+    const arnParts = event.methodArn.split(':');
+    const apiGatewayArnPrefix = arnParts.slice(0, 5).join(':');
+    const resourceParts = arnParts[5].split('/');
+    const apiId = resourceParts[0];
+    const stage = resourceParts[1];
+    
+    // Allow all methods and resources for this API and stage
+    const resource = `${apiGatewayArnPrefix}:${apiId}/${stage}/*/*`;
+    
+    console.log('Generating policy for resource:', resource);
+    
     return {
       principalId: decoded.userId,
       policyDocument: {
@@ -25,7 +38,7 @@ export const handler: APIGatewayRequestAuthorizerHandler = async (event) => {
           {
             Action: 'execute-api:Invoke',
             Effect: 'Allow',
-            Resource: event.methodArn
+            Resource: resource
           }
         ]
       },

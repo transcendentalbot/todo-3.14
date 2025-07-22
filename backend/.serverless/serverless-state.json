@@ -277,7 +277,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/wellness-companion/prod/1753118182616-2025-07-21T17:16:22.616Z/wellness-companion.zip"
+                "S3Key": "serverless/wellness-companion/prod/1753194243920-2025-07-22T14:24:03.920Z/wellness-companion.zip"
               },
               "Handler": "functions/auth/register.handler",
               "Runtime": "nodejs18.x",
@@ -314,7 +314,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/wellness-companion/prod/1753118182616-2025-07-21T17:16:22.616Z/wellness-companion.zip"
+                "S3Key": "serverless/wellness-companion/prod/1753194243920-2025-07-22T14:24:03.920Z/wellness-companion.zip"
               },
               "Handler": "functions/auth/login.handler",
               "Runtime": "nodejs18.x",
@@ -351,7 +351,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/wellness-companion/prod/1753118182616-2025-07-21T17:16:22.616Z/wellness-companion.zip"
+                "S3Key": "serverless/wellness-companion/prod/1753194243920-2025-07-22T14:24:03.920Z/wellness-companion.zip"
               },
               "Handler": "functions/auth/profile.handler",
               "Runtime": "nodejs18.x",
@@ -388,7 +388,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/wellness-companion/prod/1753118182616-2025-07-21T17:16:22.616Z/wellness-companion.zip"
+                "S3Key": "serverless/wellness-companion/prod/1753194243920-2025-07-22T14:24:03.920Z/wellness-companion.zip"
               },
               "Handler": "functions/tracking/checkin.handler",
               "Runtime": "nodejs18.x",
@@ -425,7 +425,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/wellness-companion/prod/1753118182616-2025-07-21T17:16:22.616Z/wellness-companion.zip"
+                "S3Key": "serverless/wellness-companion/prod/1753194243920-2025-07-22T14:24:03.920Z/wellness-companion.zip"
               },
               "Handler": "functions/tracking/photo.handler",
               "Runtime": "nodejs18.x",
@@ -462,7 +462,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/wellness-companion/prod/1753118182616-2025-07-21T17:16:22.616Z/wellness-companion.zip"
+                "S3Key": "serverless/wellness-companion/prod/1753194243920-2025-07-22T14:24:03.920Z/wellness-companion.zip"
               },
               "Handler": "functions/tracking/weight.handler",
               "Runtime": "nodejs18.x",
@@ -499,7 +499,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/wellness-companion/prod/1753118182616-2025-07-21T17:16:22.616Z/wellness-companion.zip"
+                "S3Key": "serverless/wellness-companion/prod/1753194243920-2025-07-22T14:24:03.920Z/wellness-companion.zip"
               },
               "Handler": "functions/tracking/supplement.handler",
               "Runtime": "nodejs18.x",
@@ -536,7 +536,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/wellness-companion/prod/1753118182616-2025-07-21T17:16:22.616Z/wellness-companion.zip"
+                "S3Key": "serverless/wellness-companion/prod/1753194243920-2025-07-22T14:24:03.920Z/wellness-companion.zip"
               },
               "Handler": "functions/auth/authorizer.handler",
               "Runtime": "nodejs18.x",
@@ -566,84 +566,84 @@
               "AuthorizerFuncLogGroup"
             ]
           },
-          "RegisterLambdaVersionPOd2K1nTurJ6gCWqtNzyF9zy12v8EyCWiZI2ILvfNRE": {
+          "RegisterLambdaVersionp3OL7TPxwLh1AFQaLODmoJV7iuHaABC3U0roF4ERA": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "RegisterLambdaFunction"
               },
-              "CodeSha256": "aoTxIP2DnvJf/tOmN3XcJGE66m3z17M9zMJxsoY5QmA="
+              "CodeSha256": "54rIeBuyh09Es31XOR0QmM3vsedffCTFxhItdDZPqnc="
             }
           },
-          "LoginLambdaVersionIbjRFUFz1OYHLo9Ev9elu8Wa2mfeMPT3qZ26BPk4tyQ": {
+          "LoginLambdaVersion5B1S45P8uZ5zZL8z9C9XmheCgzOTwKtbkUy5N5jU": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "LoginLambdaFunction"
               },
-              "CodeSha256": "aoTxIP2DnvJf/tOmN3XcJGE66m3z17M9zMJxsoY5QmA="
+              "CodeSha256": "54rIeBuyh09Es31XOR0QmM3vsedffCTFxhItdDZPqnc="
             }
           },
-          "ProfileLambdaVersionei1bR2JmkfvoK2kUH0SLgsUFhtgkb5AQRgLNgHFs": {
+          "ProfileLambdaVersionLGnzic3k0TMLZKbfcxCWub8fpMiVm4SyKPUbi8u9mI": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "ProfileLambdaFunction"
               },
-              "CodeSha256": "aoTxIP2DnvJf/tOmN3XcJGE66m3z17M9zMJxsoY5QmA="
+              "CodeSha256": "54rIeBuyh09Es31XOR0QmM3vsedffCTFxhItdDZPqnc="
             }
           },
-          "CheckinLambdaVersionMojJJYnnFnDbxcPMyrahV1JnkMe8zUgPZkLrqwTU": {
+          "CheckinLambdaVersionyg6u28iRmW2j5fQfilg2ZQz2mNKZuYhYLAidaWlfY": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "CheckinLambdaFunction"
               },
-              "CodeSha256": "aoTxIP2DnvJf/tOmN3XcJGE66m3z17M9zMJxsoY5QmA="
+              "CodeSha256": "54rIeBuyh09Es31XOR0QmM3vsedffCTFxhItdDZPqnc="
             }
           },
-          "PhotoLambdaVersionJp8mFBOoQPYDTivBLCOvmzROQYJSNWgbjKadV74UWQQ": {
+          "PhotoLambdaVersionUBYPsgzBwRo6yr6tbKaQYMy1dQzQR8Hjkluc7alyY": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "PhotoLambdaFunction"
               },
-              "CodeSha256": "aoTxIP2DnvJf/tOmN3XcJGE66m3z17M9zMJxsoY5QmA="
+              "CodeSha256": "54rIeBuyh09Es31XOR0QmM3vsedffCTFxhItdDZPqnc="
             }
           },
-          "WeightLambdaVersionELTEHA84iFqXx0xuRbpobdWolGybKY7KIX2A4PQ": {
+          "WeightLambdaVersionGhtHJxJjLdR8NVcF5OFrqO1ZaZNfTPBv103d4aW4": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "WeightLambdaFunction"
               },
-              "CodeSha256": "aoTxIP2DnvJf/tOmN3XcJGE66m3z17M9zMJxsoY5QmA="
+              "CodeSha256": "54rIeBuyh09Es31XOR0QmM3vsedffCTFxhItdDZPqnc="
             }
           },
-          "SupplementLambdaVersionTSVZ7l04Vi36jiiXHXzoJfY5kYwdCWkCTzxNPw0U0": {
+          "SupplementLambdaVersionYEpR2do624Sh6IqHRTeLV2oZwsyfCLdSEWc7JEXhrQ": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "SupplementLambdaFunction"
               },
-              "CodeSha256": "aoTxIP2DnvJf/tOmN3XcJGE66m3z17M9zMJxsoY5QmA="
+              "CodeSha256": "54rIeBuyh09Es31XOR0QmM3vsedffCTFxhItdDZPqnc="
             }
           },
-          "AuthorizerFuncLambdaVersion6TWu4DZm1xCHBnO88MxEjp85WuhKmwvGtcyk01arM": {
+          "AuthorizerFuncLambdaVersiong6FAPYr4XTO1F5Uv5u9WVKNStnXzdwCgPeZcSD8ho": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "AuthorizerFuncLambdaFunction"
               },
-              "CodeSha256": "aoTxIP2DnvJf/tOmN3XcJGE66m3z17M9zMJxsoY5QmA="
+              "CodeSha256": "54rIeBuyh09Es31XOR0QmM3vsedffCTFxhItdDZPqnc="
             }
           },
           "ApiGatewayRestApi": {
@@ -950,7 +950,7 @@
                     "StatusCode": "200",
                     "ResponseParameters": {
                       "method.response.header.Access-Control-Allow-Origin": "'*'",
-                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                      "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent'",
                       "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
                     },
                     "ResponseTemplates": {
@@ -1474,7 +1474,7 @@
               "Type": "REQUEST"
             }
           },
-          "ApiGatewayDeployment1753118132673": {
+          "ApiGatewayDeployment1753194193774": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -1795,6 +1795,34 @@
               }
             }
           },
+          "GatewayResponseDefault4XX": {
+            "Type": "AWS::ApiGateway::GatewayResponse",
+            "Properties": {
+              "ResponseParameters": {
+                "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
+                "gatewayresponse.header.Access-Control-Allow-Headers": "'*'",
+                "gatewayresponse.header.Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,OPTIONS'"
+              },
+              "ResponseType": "DEFAULT_4XX",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
+          "GatewayResponseDefault5XX": {
+            "Type": "AWS::ApiGateway::GatewayResponse",
+            "Properties": {
+              "ResponseParameters": {
+                "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
+                "gatewayresponse.header.Access-Control-Allow-Headers": "'*'",
+                "gatewayresponse.header.Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,OPTIONS'"
+              },
+              "ResponseType": "DEFAULT_5XX",
+              "RestApiId": {
+                "Ref": "ApiGatewayRestApi"
+              }
+            }
+          },
           "UsersTable": {
             "Type": "AWS::DynamoDB::Table",
             "Properties": {
@@ -1933,7 +1961,7 @@
           "RegisterLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "RegisterLambdaVersionPOd2K1nTurJ6gCWqtNzyF9zy12v8EyCWiZI2ILvfNRE"
+              "Ref": "RegisterLambdaVersionp3OL7TPxwLh1AFQaLODmoJV7iuHaABC3U0roF4ERA"
             },
             "Export": {
               "Name": "sls-wellness-companion-prod-RegisterLambdaFunctionQualifiedArn"
@@ -1942,7 +1970,7 @@
           "LoginLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "LoginLambdaVersionIbjRFUFz1OYHLo9Ev9elu8Wa2mfeMPT3qZ26BPk4tyQ"
+              "Ref": "LoginLambdaVersion5B1S45P8uZ5zZL8z9C9XmheCgzOTwKtbkUy5N5jU"
             },
             "Export": {
               "Name": "sls-wellness-companion-prod-LoginLambdaFunctionQualifiedArn"
@@ -1951,7 +1979,7 @@
           "ProfileLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "ProfileLambdaVersionei1bR2JmkfvoK2kUH0SLgsUFhtgkb5AQRgLNgHFs"
+              "Ref": "ProfileLambdaVersionLGnzic3k0TMLZKbfcxCWub8fpMiVm4SyKPUbi8u9mI"
             },
             "Export": {
               "Name": "sls-wellness-companion-prod-ProfileLambdaFunctionQualifiedArn"
@@ -1960,7 +1988,7 @@
           "CheckinLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "CheckinLambdaVersionMojJJYnnFnDbxcPMyrahV1JnkMe8zUgPZkLrqwTU"
+              "Ref": "CheckinLambdaVersionyg6u28iRmW2j5fQfilg2ZQz2mNKZuYhYLAidaWlfY"
             },
             "Export": {
               "Name": "sls-wellness-companion-prod-CheckinLambdaFunctionQualifiedArn"
@@ -1969,7 +1997,7 @@
           "PhotoLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "PhotoLambdaVersionJp8mFBOoQPYDTivBLCOvmzROQYJSNWgbjKadV74UWQQ"
+              "Ref": "PhotoLambdaVersionUBYPsgzBwRo6yr6tbKaQYMy1dQzQR8Hjkluc7alyY"
             },
             "Export": {
               "Name": "sls-wellness-companion-prod-PhotoLambdaFunctionQualifiedArn"
@@ -1978,7 +2006,7 @@
           "WeightLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "WeightLambdaVersionELTEHA84iFqXx0xuRbpobdWolGybKY7KIX2A4PQ"
+              "Ref": "WeightLambdaVersionGhtHJxJjLdR8NVcF5OFrqO1ZaZNfTPBv103d4aW4"
             },
             "Export": {
               "Name": "sls-wellness-companion-prod-WeightLambdaFunctionQualifiedArn"
@@ -1987,7 +2015,7 @@
           "SupplementLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "SupplementLambdaVersionTSVZ7l04Vi36jiiXHXzoJfY5kYwdCWkCTzxNPw0U0"
+              "Ref": "SupplementLambdaVersionYEpR2do624Sh6IqHRTeLV2oZwsyfCLdSEWc7JEXhrQ"
             },
             "Export": {
               "Name": "sls-wellness-companion-prod-SupplementLambdaFunctionQualifiedArn"
@@ -1996,7 +2024,7 @@
           "AuthorizerFuncLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "AuthorizerFuncLambdaVersion6TWu4DZm1xCHBnO88MxEjp85WuhKmwvGtcyk01arM"
+              "Ref": "AuthorizerFuncLambdaVersiong6FAPYr4XTO1F5Uv5u9WVKNStnXzdwCgPeZcSD8ho"
             },
             "Export": {
               "Name": "sls-wellness-companion-prod-AuthorizerFuncLambdaFunctionQualifiedArn"
@@ -2159,7 +2187,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "RegisterLambdaVersionPOd2K1nTurJ6gCWqtNzyF9zy12v8EyCWiZI2ILvfNRE"
+        "versionLogicalId": "RegisterLambdaVersionp3OL7TPxwLh1AFQaLODmoJV7iuHaABC3U0roF4ERA"
       },
       "login": {
         "handler": "functions/auth/login.handler",
@@ -2201,7 +2229,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "LoginLambdaVersionIbjRFUFz1OYHLo9Ev9elu8Wa2mfeMPT3qZ26BPk4tyQ"
+        "versionLogicalId": "LoginLambdaVersion5B1S45P8uZ5zZL8z9C9XmheCgzOTwKtbkUy5N5jU"
       },
       "profile": {
         "handler": "functions/auth/profile.handler",
@@ -2254,7 +2282,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "ProfileLambdaVersionei1bR2JmkfvoK2kUH0SLgsUFhtgkb5AQRgLNgHFs"
+        "versionLogicalId": "ProfileLambdaVersionLGnzic3k0TMLZKbfcxCWub8fpMiVm4SyKPUbi8u9mI"
       },
       "checkin": {
         "handler": "functions/tracking/checkin.handler",
@@ -2275,8 +2303,7 @@
                   "Authorization",
                   "X-Api-Key",
                   "X-Amz-Security-Token",
-                  "X-Amz-User-Agent",
-                  "X-Amzn-Trace-Id"
+                  "X-Amz-User-Agent"
                 ],
                 "allowCredentials": false
               },
@@ -2307,7 +2334,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "CheckinLambdaVersionMojJJYnnFnDbxcPMyrahV1JnkMe8zUgPZkLrqwTU"
+        "versionLogicalId": "CheckinLambdaVersionyg6u28iRmW2j5fQfilg2ZQz2mNKZuYhYLAidaWlfY"
       },
       "photo": {
         "handler": "functions/tracking/photo.handler",
@@ -2360,7 +2387,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "PhotoLambdaVersionJp8mFBOoQPYDTivBLCOvmzROQYJSNWgbjKadV74UWQQ"
+        "versionLogicalId": "PhotoLambdaVersionUBYPsgzBwRo6yr6tbKaQYMy1dQzQR8Hjkluc7alyY"
       },
       "weight": {
         "handler": "functions/tracking/weight.handler",
@@ -2413,7 +2440,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "WeightLambdaVersionELTEHA84iFqXx0xuRbpobdWolGybKY7KIX2A4PQ"
+        "versionLogicalId": "WeightLambdaVersionGhtHJxJjLdR8NVcF5OFrqO1ZaZNfTPBv103d4aW4"
       },
       "supplement": {
         "handler": "functions/tracking/supplement.handler",
@@ -2466,7 +2493,7 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "SupplementLambdaVersionTSVZ7l04Vi36jiiXHXzoJfY5kYwdCWkCTzxNPw0U0"
+        "versionLogicalId": "SupplementLambdaVersionYEpR2do624Sh6IqHRTeLV2oZwsyfCLdSEWc7JEXhrQ"
       },
       "authorizerFunc": {
         "handler": "functions/auth/authorizer.handler",
@@ -2483,11 +2510,39 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "AuthorizerFuncLambdaVersion6TWu4DZm1xCHBnO88MxEjp85WuhKmwvGtcyk01arM"
+        "versionLogicalId": "AuthorizerFuncLambdaVersiong6FAPYr4XTO1F5Uv5u9WVKNStnXzdwCgPeZcSD8ho"
       }
     },
     "resources": {
       "Resources": {
+        "GatewayResponseDefault4XX": {
+          "Type": "AWS::ApiGateway::GatewayResponse",
+          "Properties": {
+            "ResponseParameters": {
+              "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
+              "gatewayresponse.header.Access-Control-Allow-Headers": "'*'",
+              "gatewayresponse.header.Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,OPTIONS'"
+            },
+            "ResponseType": "DEFAULT_4XX",
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
+        "GatewayResponseDefault5XX": {
+          "Type": "AWS::ApiGateway::GatewayResponse",
+          "Properties": {
+            "ResponseParameters": {
+              "gatewayresponse.header.Access-Control-Allow-Origin": "'*'",
+              "gatewayresponse.header.Access-Control-Allow-Headers": "'*'",
+              "gatewayresponse.header.Access-Control-Allow-Methods": "'GET,POST,PUT,DELETE,OPTIONS'"
+            },
+            "ResponseType": "DEFAULT_5XX",
+            "RestApiId": {
+              "Ref": "ApiGatewayRestApi"
+            }
+          }
+        },
         "UsersTable": {
           "Type": "AWS::DynamoDB::Table",
           "Properties": {
@@ -2639,7 +2694,7 @@
     "artifact": "/Users/jay/todo-3.14/backend/.build/.serverless/wellness-companion.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/wellness-companion/prod/1753118182616-2025-07-21T17:16:22.616Z",
+    "artifactDirectoryName": "serverless/wellness-companion/prod/1753194243920-2025-07-22T14:24:03.920Z",
     "artifact": "wellness-companion.zip"
   }
 }

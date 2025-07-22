@@ -14,6 +14,11 @@ interface CheckinData {
   challengeReflection?: string;
 }
 
+interface EncryptedRequest {
+  timestamp?: number;
+  encryptedData?: string;
+}
+
 export const handler: APIGatewayProxyHandler = async (event) => {
   try {
     const userId = event.requestContext.authorizer?.userId;
@@ -21,37 +26,65 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       return createResponse(401, { message: 'Unauthorized' });
     }
 
-    const body = JSON.parse(event.body || '{}') as CheckinData;
+    const body = JSON.parse(event.body || '{}') as EncryptedRequest | CheckinData;
     
-    // Validate mood and energy ratings
-    if (body.mood && (body.mood < 1 || body.mood > 10)) {
-      return createResponse(400, { message: 'Mood must be between 1 and 10' });
-    }
-    if (body.energy && (body.energy < 1 || body.energy > 10)) {
-      return createResponse(400, { message: 'Energy must be between 1 and 10' });
-    }
+    // Check if data is encrypted
+    const isEncrypted = 'encryptedData' in body;
+    
+    if (isEncrypted) {
+      // Store encrypted data as-is
+      const timestamp = body.timestamp ? new Date(body.timestamp).toISOString() : new Date().toISOString();
+      
+      const item = {
+        userId,
+        timestamp,
+        type: 'checkin',
+        encryptedData: body.encryptedData
+      };
 
-    const timestamp = new Date().toISOString();
-    
-    const item = {
-      userId,
-      timestamp,
-      type: 'checkin',
-      data: {
-        ...body,
-        createdAt: timestamp
+      await dynamodb.put({
+        TableName: TRACKING_TABLE,
+        Item: item
+      }).promise();
+
+      return createResponse(201, {
+        message: 'Check-in recorded successfully',
+        timestamp
+      });
+    } else {
+      // Legacy path for unencrypted data (for backward compatibility)
+      const checkinData = body as CheckinData;
+      
+      // Validate mood and energy ratings
+      if (checkinData.mood && (checkinData.mood < 1 || checkinData.mood > 10)) {
+        return createResponse(400, { message: 'Mood must be between 1 and 10' });
       }
-    };
+      if (checkinData.energy && (checkinData.energy < 1 || checkinData.energy > 10)) {
+        return createResponse(400, { message: 'Energy must be between 1 and 10' });
+      }
 
-    await dynamodb.put({
-      TableName: TRACKING_TABLE,
-      Item: item
-    }).promise();
+      const timestamp = new Date().toISOString();
+      
+      const item = {
+        userId,
+        timestamp,
+        type: 'checkin',
+        data: {
+          ...checkinData,
+          createdAt: timestamp
+        }
+      };
 
-    return createResponse(201, {
-      message: 'Check-in recorded successfully',
-      checkin: item
-    });
+      await dynamodb.put({
+        TableName: TRACKING_TABLE,
+        Item: item
+      }).promise();
+
+      return createResponse(201, {
+        message: 'Check-in recorded successfully',
+        checkin: item
+      });
+    }
 
   } catch (error) {
     console.error('Check-in error:', error);

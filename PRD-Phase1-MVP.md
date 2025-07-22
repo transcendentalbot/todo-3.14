@@ -11,12 +11,17 @@ Build a functional PWA with core tracking features, voice input, and basic remin
 - [x] API Gateway configuration
 - [x] Lambda functions for core endpoints:
   - `/auth/login` - User authentication
-  - `/auth/register` - User registration
+  - `/auth/register` - User registration (with phone number)
   - `/user/profile` - Profile management
-  - `/tracking/checkin` - Daily check-ins
+  - `/tracking/checkin` - Daily check-ins (encrypted)
   - `/tracking/photo` - Photo uploads
-  - `/tracking/weight` - Weight logging
-  - `/tracking/supplement` - Supplement tracking
+  - `/tracking/weight` - Weight logging (encrypted)
+  - `/tracking/supplement` - Supplement tracking (encrypted)
+- [ ] New endpoints [Enhancement]:
+  - `/notifications/subscribe` - Push notification subscription
+  - `/tracking/quick-complete` - Quick completion from notifications
+  - `/notifications/handler` - Handle push notification delivery
+  - `/notifications/scheduled-trigger` - EventBridge trigger endpoint
 
 #### Database Schema (DynamoDB)
 ```
@@ -26,12 +31,15 @@ Users Table:
 - passwordHash
 - createdAt
 - preferences
+- pushSubscription (JSON) [Enhancement]
+- phone (String, optional) [Enhancement]
+- notificationPreferences (JSON) [Enhancement]
 
 Tracking Table:
 - userId (PK)
 - timestamp (SK)
 - type (checkin|photo|weight|supplement)
-- data (JSON)
+- encryptedData (String) [Enhancement - was 'data']
 
 Reminders Table:
 - userId (PK)
@@ -73,6 +81,8 @@ Reminders Table:
     - api.ts
     - storage.ts
     - notifications.ts
+    - encryption.ts [Enhancement]
+    - pushNotifications.ts [Enhancement]
 ```
 
 #### Essential Screens
@@ -102,18 +112,20 @@ Reminders Table:
 ### Week 5-6: Voice Integration & Notifications
 
 #### Voice Features
-- [ ] Web Speech API integration
-- [ ] Speech-to-text for all text inputs
+- [x] Web Speech API integration
+- [x] Speech-to-text for all text inputs
 - [ ] Voice commands:
   - "Log weight [number]"
   - "Took supplements"
   - "Feeling [1-10]"
-- [ ] Fallback to text input
+- [x] Fallback to text input
 
-#### Push Notifications
-- [ ] FCM setup for cross-platform
-- [ ] Service Worker notification handling
-- [ ] Permission request flow
+#### Push Notifications [Enhancement]
+- [ ] Web Push API with VAPID keys
+- [ ] Service Worker notification handling with actions
+- [ ] Permission request flow after login
+- [ ] Quick action buttons on notifications:
+  - "Complete" / "Snooze 10min"
 - [ ] Basic notification schedule:
   ```
   Morning (7am): "Good morning! Ready for check-in?"
@@ -121,6 +133,15 @@ Reminders Table:
   Evening (6pm): "Evening supplements?"
   Night (9pm): "How was your day?"
   ```
+- [ ] SMS backup for critical alerts (AWS SNS)
+- [ ] EventBridge scheduled triggers
+
+#### Client-Side Encryption [Enhancement]
+- [ ] crypto-js integration
+- [ ] Password-derived key generation
+- [ ] Encrypt all data before API calls
+- [ ] Store only salt in localStorage
+- [ ] Migration strategy for existing data
 
 ### Week 7-8: Testing & Polish
 
@@ -186,9 +207,11 @@ Reminders Table:
 - CloudWatch for monitoring
 
 #### Third-Party Services
-- FCM for push notifications
+- Web Push API with VAPID [Enhancement - replacing FCM]
+- AWS SNS for SMS backup [Enhancement]
 - AWS SES for email (password reset)
 - Cloudflare for CDN/HTTPS
+- EventBridge for scheduled notifications [Enhancement]
 
 ### MVP Constraints
 
@@ -214,12 +237,15 @@ Reminders Table:
 ❌ Smartwatch integration
 
 ### Success Metrics for Phase 1
-- App loads in <2 seconds
+
 - 90% notification delivery rate
 - Voice input works 80% of time
 - Zero critical security issues
 - 70% daily active usage (beta users)
 - <1% crash rate
+- 100% of user data encrypted [Enhancement]
+- Push notifications work on iOS/Android PWA [Enhancement]
+- SMS fallback triggers for failed critical alerts [Enhancement]
 
 ### Risk Mitigation
 1. **Voice Recognition Issues**
@@ -237,12 +263,56 @@ Reminders Table:
    - Easy snooze/disable options
    - Respect quiet hours
 
+4. **Encryption Key Loss** [Enhancement]
+   - No password recovery possible
+   - Clear user warning on signup
+   - Export unencrypted backup option
+
+5. **iOS PWA Limitations** [Enhancement]
+   - User must add to home screen first
+   - Clear installation instructions
+   - SMS fallback for critical users
+
+6. **Data Migration** [Enhancement]
+   - Existing plaintext data warning
+   - Grace period for export
+   - One-time migration tool
+
 ### Rollout Plan
 1. Internal testing (Week 8)
 2. Friends & family (Week 9)
 3. Beta users (Week 10)
 4. Iterate based on feedback
 5. Plan Phase 2 features
+
+### Enhancement Implementation Timeline [New]
+#### Week 11-12: Encryption Implementation
+- [ ] Implement EncryptionService class with crypto-js
+- [ ] Update all API calls to use encryption
+- [ ] Migrate database schema (data → encryptedData)
+- [ ] Add migration warnings for existing users
+- [ ] Test encryption/decryption performance
+
+#### Week 13-14: Push Notifications
+- [ ] Generate VAPID keys for web push
+- [ ] Update service worker with push handlers
+- [ ] Add notification subscription endpoint
+- [ ] Implement quick action responses
+- [ ] Test on iOS 16.4+ and Android PWAs
+
+#### Week 15: SMS Backup & Scheduling
+- [ ] Configure AWS SNS for SMS
+- [ ] Add phone number to registration flow
+- [ ] Set up EventBridge scheduled rules
+- [ ] Create scheduled notification Lambda
+- [ ] Test SMS fallback scenarios
+
+#### Week 16: Testing & Refinement
+- [ ] End-to-end encryption testing
+- [ ] Cross-device notification testing
+- [ ] Performance impact assessment
+- [ ] Security audit of encrypted data
+- [ ] Beta user feedback on new features
 
 ### Phase 2 Preview
 - RAG implementation for personalized insights

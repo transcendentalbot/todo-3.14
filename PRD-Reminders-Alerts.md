@@ -4,6 +4,7 @@
 ### Overview
 A context-aware notification system that adapts to user behavior and schedule, delivering timely wellness reminders through PWA push notifications.
 
+
 ### Notification Categories
 
 #### 1. Time-Block Based Reminders
@@ -11,10 +12,8 @@ Notifications aligned with daily routine phases rather than fixed times.
 
 **Sleep Zone (10pm - 6am)**
 - Wind-down reminder (30 min before sleep)
-- "Reflect on today's happiness moments"
 - Morning wake greeting
 - Sleep quality check-in
-- Morning mood check
 
 **Gym Hour (6am - 7am)**
 - Pre-workout motivation
@@ -22,13 +21,10 @@ Notifications aligned with daily routine phases rather than fixed times.
 - Energy level check
 
 **Startup Deep Work (7am - 5pm)**
-- Morning goal setting + mood baseline
-- "What would make today fulfilling?"
+- Morning goal setting
 - Lunch break reminder
 - Afternoon energy check
-- "Quick happiness check-in"
 - End-of-day reflection
-- "What brought you joy during work?"
 
 **Office Hours (5pm - 8pm)**
 - Transition notification
@@ -37,10 +33,7 @@ Notifications aligned with daily routine phases rather than fixed times.
 
 **Evening Routine (8pm - 10pm)**
 - Dinner documentation
-- "What made you happiest today?" journal prompt
-- "What challenged you?" reflection
 - Gratitude practice
-- "What does happiness mean to you?" (weekly)
 - Next-day preparation
 
 #### 2. Smart Reminder Features
@@ -75,6 +68,7 @@ Title: "⚠️ Medication Reminder"
 Body: "Time for your morning supplements"
 Actions: [Taken] [Snooze 30min]
 Repeat: Every 30 min until acknowledged
+Fallback: SMS after 2 failed attempts
 ```
 
 #### 3. Gentle Nudges
@@ -82,20 +76,6 @@ Repeat: Every 30 min until acknowledged
 Title: "Wellness Companion"
 Body: "Haven't heard from you today 💭"
 Actions: [Quick Check-in] [Dismiss]
-```
-
-#### 5. Journaling Prompts
-```
-Title: "Evening Reflection 🌙"
-Body: "Ready to explore today's happiness?"
-Actions: [Voice Journal] [Text Entry] [Later]
-```
-
-#### 6. Mood Patterns
-```
-Title: "Weekly Insight 📊"
-Body: "You seem happiest after morning workouts"
-Actions: [Explore More] [Dismiss]
 ```
 
 #### 4. Celebration Messages
@@ -140,15 +120,29 @@ Actions: [View Progress] [Share]
 
 ### Technical Implementation
 
-#### Push Notification Service
-- Firebase Cloud Messaging (FCM)
-- APNs for iOS compatibility
-- Web Push for desktop
-- Fallback to SMS for critical alerts
+#### Push Notification Service [Updated]
+- Web Push API with VAPID keys (replacing FCM)
+- Service Worker push event handling
+- Quick action buttons in notifications
+- SMS fallback via AWS SNS for critical alerts
+- Encrypted subscription data in DynamoDB
+
+#### Backend Architecture [Updated]
+```
+Lambda Functions:
+- notificationHandler: Process push requests
+- scheduledNotificationTrigger: EventBridge handler
+- /api/notifications/subscribe: Store push subscriptions
+- /api/tracking/quick-complete: Handle notification actions
+```
 
 #### Scheduling System
 - AWS EventBridge for reliable delivery
-- DynamoDB for user preferences
+  - 7 AM: Morning check-in
+  - 12 PM: Lunch reminder
+  - 6 PM: Supplement reminder
+  - 9 PM: Evening reflection
+- DynamoDB for user preferences (encrypted)
 - Lambda functions for logic
 - CloudWatch for monitoring
 
@@ -157,6 +151,12 @@ Actions: [View Progress] [Share]
 - Priority queuing for critical alerts
 - Batch processing for efficiency
 - Dead letter queue for failures
+
+#### Client-Side Encryption [New]
+- All notification preferences encrypted before storage
+- crypto-js for encryption/decryption
+- Password-derived keys
+- No plaintext user data in backend
 
 ### Analytics & Optimization
 
@@ -213,3 +213,39 @@ Actions: [View Progress] [Share]
 - Calendar integration
 - Weather-based adjustments
 - Social accountability features
+
+### Implementation Status [New]
+
+#### Phase 1 - Encryption (Week 11-12)
+- [ ] Create EncryptionService class
+- [ ] Update API calls for encrypted payloads
+- [ ] Migrate user preferences to encrypted format
+- [ ] Test encryption performance impact
+
+#### Phase 2 - Push Notifications (Week 13-14)
+- [ ] Generate VAPID public/private keys
+- [ ] Update service worker with push handlers
+- [ ] Create notification subscription endpoint
+- [ ] Implement quick action handlers
+- [ ] Request notification permissions post-login
+- [ ] Test on iOS 16.4+ PWA
+
+#### Phase 3 - SMS Backup (Week 15)
+- [ ] Configure AWS SNS
+- [ ] Add phone number to registration
+- [ ] Create SMS fallback logic
+- [ ] Set cost alerts ($0.01/SMS)
+
+#### Phase 4 - Scheduled Notifications (Week 15)
+- [ ] Create EventBridge rules (7am, 12pm, 6pm, 9pm)
+- [ ] Deploy scheduled trigger Lambda
+- [ ] Link to user preferences
+- [ ] Test timezone handling
+
+#### Testing Requirements
+- [ ] iOS Safari PWA notifications
+- [ ] Android Chrome PWA notifications
+- [ ] Offline queue handling
+- [ ] SMS delivery verification
+- [ ] Encryption/decryption speed
+- [ ] Battery impact assessment

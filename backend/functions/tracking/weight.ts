@@ -1,6 +1,7 @@
 import { APIGatewayProxyHandler } from 'aws-lambda';
 import * as AWS from 'aws-sdk';
 import { createResponse } from '../../utils/response';
+import { EncryptedRequest, isEncryptedRequest, handleEncryptedData } from '../../utils/encryption';
 
 const dynamodb = new AWS.DynamoDB.DocumentClient();
 const TRACKING_TABLE = process.env.TRACKING_TABLE!;
@@ -18,13 +19,31 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       return createResponse(401, { message: 'Unauthorized' });
     }
 
-    const body = JSON.parse(event.body || '{}') as WeightData;
+    const body = JSON.parse(event.body || '{}') as EncryptedRequest | WeightData;
     
-    if (!body.weight || !body.unit) {
+    // Handle encrypted data
+    if (isEncryptedRequest(body)) {
+      const item = handleEncryptedData(userId, 'weight', body);
+      
+      await dynamodb.put({
+        TableName: TRACKING_TABLE,
+        Item: item
+      }).promise();
+
+      return createResponse(201, {
+        message: 'Weight recorded successfully',
+        timestamp: item.timestamp
+      });
+    }
+    
+    // Legacy unencrypted path
+    const weightData = body as WeightData;
+    
+    if (!weightData.weight || !weightData.unit) {
       return createResponse(400, { message: 'Weight and unit are required' });
     }
 
-    if (body.weight <= 0 || body.weight > 1000) {
+    if (weightData.weight <= 0 || weightData.weight > 1000) {
       return createResponse(400, { message: 'Weight must be between 0 and 1000' });
     }
 
@@ -35,9 +54,9 @@ export const handler: APIGatewayProxyHandler = async (event) => {
       timestamp,
       type: 'weight',
       data: {
-        weight: body.weight,
-        unit: body.unit,
-        note: body.note,
+        weight: weightData.weight,
+        unit: weightData.unit,
+        note: weightData.note,
         createdAt: timestamp
       }
     };

@@ -1,19 +1,40 @@
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useState, useEffect } from 'react'
+import NotificationPrompt from '../components/NotificationPrompt'
+import pushNotificationService from '../services/pushNotifications'
 
 export default function Dashboard() {
   const { user, logout } = useAuth()
   const navigate = useNavigate()
   const [greeting, setGreeting] = useState('')
   const [streak] = useState(0)
+  const [showNotificationPrompt, setShowNotificationPrompt] = useState(false)
 
   useEffect(() => {
     const hour = new Date().getHours()
     if (hour < 12) setGreeting('Good morning')
     else if (hour < 18) setGreeting('Good afternoon')
     else setGreeting('Good evening')
+    
+    // Check if we should show notification prompt
+    checkNotificationStatus()
   }, [])
+  
+  const checkNotificationStatus = async () => {
+    const hasPrompted = localStorage.getItem('notificationPrompted')
+    if (!hasPrompted) {
+      await pushNotificationService.initialize()
+      if (!pushNotificationService.isEnabled()) {
+        setShowNotificationPrompt(true)
+      }
+    }
+  }
+  
+  const handleNotificationPromptComplete = () => {
+    localStorage.setItem('notificationPrompted', 'true')
+    setShowNotificationPrompt(false)
+  }
 
   const quickActions = [
     {
@@ -118,6 +139,11 @@ export default function Dashboard() {
           </div>
         </div>
       </main>
+      
+      {/* Notification Prompt Modal */}
+      {showNotificationPrompt && (
+        <NotificationPrompt onComplete={handleNotificationPromptComplete} />
+      )}
     </div>
   )
 }

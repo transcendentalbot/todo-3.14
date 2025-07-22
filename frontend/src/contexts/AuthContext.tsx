@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react'
 import { api } from '../services/api'
+import encryptionService from '../services/encryption'
 
 interface User {
   userId: string
@@ -59,6 +60,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.setItem('token', token)
     api.defaults.headers.common['Authorization'] = `Bearer ${token}`
     
+    // Initialize encryption with user's password
+    await encryptionService.initialize(password)
+    
     setToken(token)
     setUser(user)
   }
@@ -73,6 +77,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const logout = () => {
     localStorage.removeItem('token')
     delete api.defaults.headers.common['Authorization']
+    encryptionService.clear()
     setToken(null)
     setUser(null)
   }
