@@ -16,8 +16,8 @@ provider:
     PHOTOS_BUCKET: ${self:service}-photos-${self:provider.stage}
     COGNITO_USER_POOL_ID: us-east-1_fTxU26uy4
     COGNITO_CLIENT_ID: 3i8iauebg4sseeh6qdlstncmh9
-    VAPID_PUBLIC_KEY: ${env:VAPID_PUBLIC_KEY}
-    VAPID_PRIVATE_KEY: ${env:VAPID_PRIVATE_KEY}
+    VAPID_PUBLIC_KEY: ${env:VAPID_PUBLIC_KEY, 'BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA'}
+    VAPID_PRIVATE_KEY: ${env:VAPID_PRIVATE_KEY, '1-Rbe8xi9Ufmoq0CxIhJpLrl5DJustXlfbO8_2FwJW8'}
     VAPID_EMAIL: ${env:VAPID_EMAIL, 'mailto:admin@wellness-companion.com'}
   iam:
     role:
