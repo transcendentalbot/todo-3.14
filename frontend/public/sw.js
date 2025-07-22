@@ -1,8 +1,11 @@
 // Import Workbox libraries
 importScripts('https://storage.googleapis.com/workbox-cdn/releases/7.0.0/workbox-sw.js');
 
-// Precaching and routing setup by Vite PWA plugin will be injected here
-// The actual manifest will be injected by the build process
+// Precache manifest injection point
+self.__WB_MANIFEST;
+
+// Initialize workbox precaching
+workbox.precaching.precacheAndRoute(self.__WB_MANIFEST || []);
 
 // Push notification event handler
 self.addEventListener('push', function(event) {
