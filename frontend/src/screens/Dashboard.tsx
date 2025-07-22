@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../contexts/AuthContext'
 import { useState, useEffect } from 'react'
 import NotificationPrompt from '../components/NotificationPrompt'
+import NotificationTest from '../components/NotificationTest'
 import pushNotificationService from '../services/pushNotifications'
 
 export default function Dashboard() {
@@ -137,6 +138,11 @@ export default function Dashboard() {
               <span className="text-gray-400">Pending</span>
             </div>
           </div>
+        </div>
+
+        {/* Notification Test Component */}
+        <div className="mt-6">
+          <NotificationTest />
         </div>
       </main>
       
