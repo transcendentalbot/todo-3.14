@@ -176,22 +176,22 @@ functions:
     environment:
       NOTIFICATION_HANDLER_FUNCTION: ${self:service}-${self:provider.stage}-notificationHandler
     events:
-      - eventBridge:
-          rule: morning-notification-rule
-          detail-type:
-            - morning
-      - eventBridge:
-          rule: lunch-notification-rule
-          detail-type:
-            - lunch
-      - eventBridge:
-          rule: supplement-notification-rule
-          detail-type:
-            - supplement
-      - eventBridge:
-          rule: evening-notification-rule
-          detail-type:
-            - evening
+      - schedule: 
+          rate: cron(0 7 * * ? *)  # 7 AM UTC daily
+          input:
+            detail-type: morning
+      - schedule:
+          rate: cron(0 12 * * ? *)  # 12 PM UTC daily
+          input:
+            detail-type: lunch
+      - schedule:
+          rate: cron(0 18 * * ? *)  # 6 PM UTC daily
+          input:
+            detail-type: supplement
+      - schedule:
+          rate: cron(0 21 * * ? *)  # 9 PM UTC daily
+          input:
+            detail-type: evening
 
   # Authorizer
   authorizerFunc:
@@ -298,85 +298,3 @@ resources:
             - Id: DeleteOldPhotos
               Status: Enabled
               ExpirationInDays: 90
-    
-    # EventBridge Rules for scheduled notifications
-    MorningNotificationRule:
-      Type: AWS::Events::Rule
-      Properties:
-        Name: morning-notification-rule
-        Description: Trigger morning check-in notifications at 7 AM
-        ScheduleExpression: cron(0 7 * * ? *)  # 7 AM UTC daily
-        State: ENABLED
-        Targets:
-          - Arn: !GetAtt ScheduledNotificationTriggerLambdaFunction.Arn
-            Id: morning-notification-target
-            Input: '{"detail-type": "morning"}'
-    
-    LunchNotificationRule:
-      Type: AWS::Events::Rule
-      Properties:
-        Name: lunch-notification-rule
-        Description: Trigger lunch reminder notifications at 12 PM
-        ScheduleExpression: cron(0 12 * * ? *)  # 12 PM UTC daily
-        State: ENABLED
-        Targets:
-          - Arn: !GetAtt ScheduledNotificationTriggerLambdaFunction.Arn
-            Id: lunch-notification-target
-            Input: '{"detail-type": "lunch"}'
-    
-    SupplementNotificationRule:
-      Type: AWS::Events::Rule
-      Properties:
-        Name: supplement-notification-rule
-        Description: Trigger supplement reminder notifications at 6 PM
-        ScheduleExpression: cron(0 18 * * ? *)  # 6 PM UTC daily
-        State: ENABLED
-        Targets:
-          - Arn: !GetAtt ScheduledNotificationTriggerLambdaFunction.Arn
-            Id: supplement-notification-target
-            Input: '{"detail-type": "supplement"}'
-    
-    EveningNotificationRule:
-      Type: AWS::Events::Rule
-      Properties:
-        Name: evening-notification-rule
-        Description: Trigger evening reflection notifications at 9 PM
-        ScheduleExpression: cron(0 21 * * ? *)  # 9 PM UTC daily
-        State: ENABLED
-        Targets:
-          - Arn: !GetAtt ScheduledNotificationTriggerLambdaFunction.Arn
-            Id: evening-notification-target
-            Input: '{"detail-type": "evening"}'
-    
-    # Permissions for EventBridge to invoke Lambda
-    MorningNotificationPermission:
-      Type: AWS::Lambda::Permission
-      Properties:
-        FunctionName: !GetAtt ScheduledNotificationTriggerLambdaFunction.Arn
-        Action: lambda:InvokeFunction
-        Principal: events.amazonaws.com
-        SourceArn: !GetAtt MorningNotificationRule.Arn
-    
-    LunchNotificationPermission:
-      Type: AWS::Lambda::Permission
-      Properties:
-        FunctionName: !GetAtt ScheduledNotificationTriggerLambdaFunction.Arn
-        Action: lambda:InvokeFunction
-        Principal: events.amazonaws.com
-        SourceArn: !GetAtt LunchNotificationRule.Arn
-    
-    SupplementNotificationPermission:
-      Type: AWS::Lambda::Permission
-      Properties:
-        FunctionName: !GetAtt ScheduledNotificationTriggerLambdaFunction.Arn
-        Action: lambda:InvokeFunction
-        Principal: events.amazonaws.com
-        SourceArn: !GetAtt SupplementNotificationRule.Arn
-    
-    EveningNotificationPermission:
-      Type: AWS::Lambda::Permission
-      Properties:
-        FunctionName: !GetAtt ScheduledNotificationTriggerLambdaFunction.Arn
-        Action: lambda:InvokeFunction
-        Principal: events.amazonaws.com
-        SourceArn: !GetAtt EveningNotificationRule.Arn

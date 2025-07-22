@@ -67,7 +67,7 @@ const notificationTemplates: Record<string, NotificationSchedule> = {
 export const handler: EventBridgeHandler<string, any, void> = async (event) => {
   try {
     // Get notification type from event detail
-    const notificationType = event.detail?.type || event['detail-type'];
+    const notificationType = event['detail-type'] || event.detail?.['detail-type'] || event.detail?.type;
     const template = notificationTemplates[notificationType];
     
     if (!template) {

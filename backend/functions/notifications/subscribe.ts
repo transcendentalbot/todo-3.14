@@ -33,7 +33,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
     }
 
     // Update user with push subscription and optional phone number
-    const updateExpression = 'SET pushSubscription = :subscription';
+    let updateExpression = 'SET pushSubscription = :subscription';
     const expressionAttributeValues: any = {
       ':subscription': body.subscription
     };
