@@ -4,48 +4,79 @@ import pushNotificationService from '../services/pushNotifications';
 export default function NotificationTest() {
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState('');
+  const [error, setError] = useState('');
 
   const sendTestNotification = async () => {
     setIsLoading(true);
     setMessage('');
+    setError('');
     
     try {
-      // Check if notifications are enabled
-      if (!pushNotificationService.isEnabled()) {
-        const success = await pushNotificationService.requestPermission();
-        if (!success) {
-          setMessage('Please enable notifications first');
+      // Check browser support
+      if (!('Notification' in window)) {
+        setError('Notifications not supported in this browser');
+        setIsLoading(false);
+        return;
+      }
+
+      // Check permission status
+      const permission = Notification.permission;
+      setMessage(`Permission status: ${permission}`);
+
+      // Request permission if needed
+      if (permission === 'default') {
+        const newPermission = await Notification.requestPermission();
+        if (newPermission !== 'granted') {
+          setError('Notification permission denied');
           setIsLoading(false);
           return;
         }
+      } else if (permission === 'denied') {
+        setError('Notifications blocked. Please enable in browser settings.');
+        setIsLoading(false);
+        return;
       }
 
-      // Send a test notification
-      await pushNotificationService.showLocalNotification(
-        '🎉 Test Notification', 
-        {
-          body: 'Your notifications are working! Tap an action below.',
-          badge: '/pwa-192x192.png',
-          icon: '/pwa-192x192.png',
-          vibrate: [200, 100, 200],
-          requireInteraction: true,
-          actions: [
-            { action: 'complete', title: '✅ Complete' },
-            { action: 'snooze', title: '⏰ Snooze 10min' }
-          ],
-          data: {
-            type: 'test',
-            timestamp: Date.now()
-          }
-        }
-      );
+      // Check service worker
+      if (!('serviceWorker' in navigator)) {
+        setError('Service Workers not supported');
+        setIsLoading(false);
+        return;
+      }
+
+      const registration = await navigator.serviceWorker.ready;
       
-      setMessage('Test notification sent! Check your notifications.');
-    } catch (error) {
+      // Send notification with a delay to ensure it shows even if browser is focused
+      setTimeout(async () => {
+        try {
+          await registration.showNotification('🎉 Test Notification', {
+            body: 'Your notifications are working! This should appear even if the browser is open.',
+            icon: '/pwa-192x192.png',
+            badge: '/pwa-192x192.png',
+            tag: 'test-notification',
+            requireInteraction: false, // Don't require interaction for test
+            actions: [
+              { action: 'complete', title: '✅ Complete' },
+              { action: 'snooze', title: '⏰ Snooze' }
+            ],
+            data: {
+              type: 'test',
+              timestamp: Date.now()
+            }
+          });
+          
+          setMessage('✅ Notification sent! It should appear in your notification center.');
+          setError('');
+        } catch (err: any) {
+          setError(`Failed to show notification: ${err.message || err}`);
+        }
+      }, 1000); // 1 second delay
+
+    } catch (error: any) {
       console.error('Notification test failed:', error);
-      setMessage('Failed to send notification. Check console for details.');
+      setError(`Error: ${error.message || error.toString()}`);
     } finally {
-      setIsLoading(false);
+      setTimeout(() => setIsLoading(false), 1500);
     }
   };
 
@@ -89,18 +120,35 @@ export default function NotificationTest() {
       </div>
 
       {message && (
-        <div className={`p-3 rounded-lg text-sm ${
-          message.includes('Failed') ? 'bg-red-50 text-red-700' : 'bg-green-50 text-green-700'
-        }`}>
+        <div className="p-3 rounded-lg text-sm bg-blue-50 text-blue-700">
           {message}
+        </div>
+      )}
+
+      {error && (
+        <div className="p-3 rounded-lg text-sm bg-red-50 text-red-700">
+          <strong>Error:</strong> {error}
         </div>
       )}
 
       <div className="text-xs text-gray-500 space-y-1">
         <p>• Notifications must be enabled in your browser</p>
         <p>• iOS users: Add app to home screen first</p>
+        <p>• Mac users: Check Notification Center if not visible</p>
         <p>• Test works even when app is in background</p>
       </div>
+
+      {/* Debug Info */}
+      <details className="mt-4">
+        <summary className="text-xs text-gray-600 cursor-pointer">Debug Info</summary>
+        <div className="mt-2 p-2 bg-gray-50 rounded text-xs text-gray-600 space-y-1">
+          <p>Browser: {navigator.userAgent.includes('iPhone') ? 'iOS' : navigator.userAgent.includes('Android') ? 'Android' : 'Desktop'}</p>
+          <p>Notification Support: {('Notification' in window) ? 'Yes' : 'No'}</p>
+          <p>Permission: {('Notification' in window) ? Notification.permission : 'N/A'}</p>
+          <p>Service Worker: {('serviceWorker' in navigator) ? 'Supported' : 'Not Supported'}</p>
+          <p>PWA Mode: {window.matchMedia('(display-mode: standalone)').matches ? 'Yes' : 'No'}</p>
+        </div>
+      </details>
     </div>
   );
 }
