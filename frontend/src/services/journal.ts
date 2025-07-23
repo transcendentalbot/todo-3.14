@@ -26,16 +26,23 @@ export interface CreateJournalEntryData {
 
 class JournalService {
   async createEntry(data: CreateJournalEntryData): Promise<{ entryId: string; createdAt: string }> {
-    const encryptedContent = await encryptionService.encrypt(data.content);
+    console.log('Creating journal entry:', { contentLength: data.content.length });
     
-    const response = await api.post('/journal/entry', {
+    const encryptedContent = await encryptionService.encrypt(data.content);
+    console.log('Encrypted content length:', encryptedContent.length);
+    
+    const payload = {
       encryptedContent,
       metadata: {
         ...data.metadata,
         wordCount: data.content.split(/\s+/).filter(word => word.length > 0).length,
         createdVia: data.metadata?.createdVia || 'web'
       }
-    });
+    };
+    console.log('Sending payload:', payload);
+
+    const response = await api.post('/journal/entry', payload);
+    console.log('Journal entry created:', response.data);
 
     // Process entry with AI in the background
     try {
