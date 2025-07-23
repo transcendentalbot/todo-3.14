@@ -11,7 +11,6 @@ const Journal: React.FC = () => {
   const [selectedEntry, setSelectedEntry] = useState<JournalEntry | null>(null);
   const [showNewEntry, setShowNewEntry] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [isSearching, setIsSearching] = useState(false);
 
   useEffect(() => {
     loadEntries();
@@ -60,13 +59,13 @@ const Journal: React.FC = () => {
     }
 
     try {
-      setIsSearching(true);
+      setIsLoading(true);
       const results = await journalService.searchEntries(searchQuery);
       setEntries(results);
     } catch (error) {
       console.error('Failed to search entries:', error);
     } finally {
-      setIsSearching(false);
+      setIsLoading(false);
     }
   };
 
@@ -172,7 +171,8 @@ const Journal: React.FC = () => {
 
             <div className="mt-4">
               <VoiceInput
-                onTranscript={(text) => setNewEntry(prev => prev + ' ' + text)}
+                value=""
+                onChange={(text) => setNewEntry(prev => prev + ' ' + text)}
                 placeholder="Tap to speak..."
               />
             </div>

@@ -1,5 +1,5 @@
 import { api } from './api';
-import { encryptData, decryptData } from './encryption';
+import encryptionService from './encryption';
 
 export interface JournalEntry {
   entryId: string;
@@ -26,7 +26,7 @@ export interface CreateJournalEntryData {
 
 class JournalService {
   async createEntry(data: CreateJournalEntryData): Promise<{ entryId: string; createdAt: string }> {
-    const encryptedContent = await encryptData(data.content);
+    const encryptedContent = await encryptionService.encrypt(data.content);
     
     const response = await api.post('/journal/entry', {
       encryptedContent,
@@ -65,7 +65,7 @@ class JournalService {
     const decryptedEntries = await Promise.all(
       response.data.entries.map(async (entry: any) => ({
         ...entry,
-        content: await decryptData(entry.encryptedContent)
+        content: await encryptionService.decrypt(entry.encryptedContent)
       }))
     );
 
@@ -80,12 +80,12 @@ class JournalService {
     
     return {
       ...response.data,
-      content: await decryptData(response.data.encryptedContent)
+      content: await encryptionService.decrypt(response.data.encryptedContent)
     };
   }
 
   async updateEntry(entryId: string, content: string, metadata?: any): Promise<void> {
-    const encryptedContent = await encryptData(content);
+    const encryptedContent = await encryptionService.encrypt(content);
     
     await api.put(`/journal/entry/${entryId}`, {
       encryptedContent,
@@ -113,7 +113,7 @@ class JournalService {
       const decryptedEntries = await Promise.all(
         response.data.entries.map(async (entry: any) => ({
           ...entry,
-          content: await decryptData(entry.encryptedContent)
+          content: await encryptionService.decrypt(entry.encryptedContent)
         }))
       );
       
