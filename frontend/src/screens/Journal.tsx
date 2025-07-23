@@ -13,6 +13,12 @@ const Journal: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
+    // Check if encryption is initialized
+    if (!localStorage.getItem('encryption_salt')) {
+      alert('Please log in again to access journal features');
+      navigate('/login');
+      return;
+    }
     loadEntries();
   }, []);
 

@@ -64,7 +64,7 @@ export const getEntries: APIGatewayProxyHandler = async (event) => {
       TableName: JOURNAL_ENTRIES_TABLE,
       KeyConditionExpression: 'userId = :userId',
       ExpressionAttributeValues: {
-        ':userId': `USER#${user.userId}`
+        ':userId': `USER#${userId}`
       },
       ScanIndexForward: false, // Most recent first
       Limit: limit

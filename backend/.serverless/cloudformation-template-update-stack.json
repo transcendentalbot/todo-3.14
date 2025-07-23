@@ -74,103 +74,127 @@
     "RegisterLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/wellness-companion-dev-register"
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-register"
       }
     },
     "LoginLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/wellness-companion-dev-login"
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-login"
       }
     },
     "ProfileLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/wellness-companion-dev-profile"
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-profile"
       }
     },
     "CheckinLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/wellness-companion-dev-checkin"
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-checkin"
       }
     },
     "PhotoLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/wellness-companion-dev-photo"
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-photo"
       }
     },
     "WeightLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/wellness-companion-dev-weight"
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-weight"
       }
     },
     "SupplementLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/wellness-companion-dev-supplement"
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-supplement"
       }
     },
     "HistoryLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/wellness-companion-dev-history"
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-history"
       }
     },
     "NotificationSubscribeLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/wellness-companion-dev-notificationSubscribe"
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-notificationSubscribe"
       }
     },
     "NotificationHandlerLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/wellness-companion-dev-notificationHandler"
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-notificationHandler"
       }
     },
     "ScheduledNotificationTriggerLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/wellness-companion-dev-scheduledNotificationTrigger"
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-scheduledNotificationTrigger"
+      }
+    },
+    "IntelligentNotificationSenderLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-intelligentNotificationSender"
       }
     },
     "JournalCreateLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/wellness-companion-dev-journalCreate"
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-journalCreate"
       }
     },
     "JournalListLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/wellness-companion-dev-journalList"
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-journalList"
       }
     },
     "JournalGetLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/wellness-companion-dev-journalGet"
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-journalGet"
       }
     },
     "JournalUpdateLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/wellness-companion-dev-journalUpdate"
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-journalUpdate"
       }
     },
     "JournalDeleteLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/wellness-companion-dev-journalDelete"
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-journalDelete"
+      }
+    },
+    "JournalProcessLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-journalProcess"
+      }
+    },
+    "JournalSearchLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-journalSearch"
+      }
+    },
+    "JournalContextLogGroup": {
+      "Type": "AWS::Logs::LogGroup",
+      "Properties": {
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-journalContext"
       }
     },
     "AuthorizerFuncLogGroup": {
       "Type": "AWS::Logs::LogGroup",
       "Properties": {
-        "LogGroupName": "/aws/lambda/wellness-companion-dev-authorizerFunc"
+        "LogGroupName": "/aws/lambda/wellness-companion-prod-authorizerFunc"
       }
     },
     "IamRoleLambdaExecution": {
@@ -199,7 +223,7 @@
                 "-",
                 [
                   "wellness-companion",
-                  "dev",
+                  "prod",
                   "lambda"
                 ]
               ]
@@ -216,7 +240,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/wellness-companion-dev*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/wellness-companion-prod*:*"
                     }
                   ]
                 },
@@ -227,7 +251,7 @@
                   ],
                   "Resource": [
                     {
-                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/wellness-companion-dev*:*:*"
+                      "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/wellness-companion-prod*:*:*"
                     }
                   ]
                 },
@@ -242,15 +266,15 @@
                     "dynamodb:Scan"
                   ],
                   "Resource": [
-                    "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-users-dev",
-                    "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-tracking-dev",
-                    "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-reminders-dev",
-                    "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-journal-entries-dev",
-                    "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-user-context-dev",
-                    "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-insight-queue-dev",
-                    "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-users-dev/index/*",
-                    "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-tracking-dev/index/*",
-                    "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-insight-queue-dev/index/*"
+                    "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-users-prod",
+                    "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-tracking-prod",
+                    "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-reminders-prod",
+                    "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-journal-entries-prod",
+                    "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-user-context-prod",
+                    "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-insight-queue-prod",
+                    "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-users-prod/index/*",
+                    "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-tracking-prod/index/*",
+                    "arn:aws:dynamodb:us-east-1:*:table/wellness-companion-insight-queue-prod/index/*"
                   ]
                 },
                 {
@@ -260,7 +284,7 @@
                     "s3:GetObject",
                     "s3:DeleteObject"
                   ],
-                  "Resource": "arn:aws:s3:::wellness-companion-photos-dev/*"
+                  "Resource": "arn:aws:s3:::wellness-companion-photos-prod/*"
                 },
                 {
                   "Effect": "Allow",
@@ -283,7 +307,17 @@
                   "Action": [
                     "lambda:InvokeFunction"
                   ],
-                  "Resource": "arn:aws:lambda:us-east-1:*:function:wellness-companion-dev-notificationHandler"
+                  "Resource": "arn:aws:lambda:us-east-1:*:function:wellness-companion-prod-notificationHandler"
+                },
+                {
+                  "Effect": "Allow",
+                  "Action": [
+                    "bedrock:InvokeModel"
+                  ],
+                  "Resource": [
+                    "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-haiku-20240307-v1:0",
+                    "arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v1"
+                  ]
                 }
               ]
             }
@@ -295,7 +329,7 @@
             "-",
             [
               "wellness-companion",
-              "dev",
+              "prod",
               {
                 "Ref": "AWS::Region"
               },
@@ -312,24 +346,24 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/wellness-companion/dev/1753268347025-2025-07-23T10:59:07.025Z/wellness-companion.zip"
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
         },
         "Handler": "functions/auth/register.handler",
         "Runtime": "nodejs18.x",
-        "FunctionName": "wellness-companion-dev-register",
+        "FunctionName": "wellness-companion-prod-register",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "STAGE": "dev",
+            "STAGE": "prod",
             "JWT_SECRET": "dev-secret-change-in-prod",
-            "USERS_TABLE": "wellness-companion-users-dev",
-            "TRACKING_TABLE": "wellness-companion-tracking-dev",
-            "REMINDERS_TABLE": "wellness-companion-reminders-dev",
-            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-dev",
-            "USER_CONTEXT_TABLE": "wellness-companion-user-context-dev",
-            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-dev",
-            "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
             "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
             "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
             "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
@@ -355,24 +389,24 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/wellness-companion/dev/1753268347025-2025-07-23T10:59:07.025Z/wellness-companion.zip"
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
         },
         "Handler": "functions/auth/login.handler",
         "Runtime": "nodejs18.x",
-        "FunctionName": "wellness-companion-dev-login",
+        "FunctionName": "wellness-companion-prod-login",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "STAGE": "dev",
+            "STAGE": "prod",
             "JWT_SECRET": "dev-secret-change-in-prod",
-            "USERS_TABLE": "wellness-companion-users-dev",
-            "TRACKING_TABLE": "wellness-companion-tracking-dev",
-            "REMINDERS_TABLE": "wellness-companion-reminders-dev",
-            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-dev",
-            "USER_CONTEXT_TABLE": "wellness-companion-user-context-dev",
-            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-dev",
-            "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
             "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
             "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
             "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
@@ -398,24 +432,24 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/wellness-companion/dev/1753268347025-2025-07-23T10:59:07.025Z/wellness-companion.zip"
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
         },
         "Handler": "functions/auth/profile.handler",
         "Runtime": "nodejs18.x",
-        "FunctionName": "wellness-companion-dev-profile",
+        "FunctionName": "wellness-companion-prod-profile",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "STAGE": "dev",
+            "STAGE": "prod",
             "JWT_SECRET": "dev-secret-change-in-prod",
-            "USERS_TABLE": "wellness-companion-users-dev",
-            "TRACKING_TABLE": "wellness-companion-tracking-dev",
-            "REMINDERS_TABLE": "wellness-companion-reminders-dev",
-            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-dev",
-            "USER_CONTEXT_TABLE": "wellness-companion-user-context-dev",
-            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-dev",
-            "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
             "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
             "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
             "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
@@ -441,24 +475,24 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/wellness-companion/dev/1753268347025-2025-07-23T10:59:07.025Z/wellness-companion.zip"
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
         },
         "Handler": "functions/tracking/checkin.handler",
         "Runtime": "nodejs18.x",
-        "FunctionName": "wellness-companion-dev-checkin",
+        "FunctionName": "wellness-companion-prod-checkin",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "STAGE": "dev",
+            "STAGE": "prod",
             "JWT_SECRET": "dev-secret-change-in-prod",
-            "USERS_TABLE": "wellness-companion-users-dev",
-            "TRACKING_TABLE": "wellness-companion-tracking-dev",
-            "REMINDERS_TABLE": "wellness-companion-reminders-dev",
-            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-dev",
-            "USER_CONTEXT_TABLE": "wellness-companion-user-context-dev",
-            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-dev",
-            "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
             "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
             "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
             "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
@@ -484,24 +518,24 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/wellness-companion/dev/1753268347025-2025-07-23T10:59:07.025Z/wellness-companion.zip"
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
         },
         "Handler": "functions/tracking/photo.handler",
         "Runtime": "nodejs18.x",
-        "FunctionName": "wellness-companion-dev-photo",
+        "FunctionName": "wellness-companion-prod-photo",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "STAGE": "dev",
+            "STAGE": "prod",
             "JWT_SECRET": "dev-secret-change-in-prod",
-            "USERS_TABLE": "wellness-companion-users-dev",
-            "TRACKING_TABLE": "wellness-companion-tracking-dev",
-            "REMINDERS_TABLE": "wellness-companion-reminders-dev",
-            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-dev",
-            "USER_CONTEXT_TABLE": "wellness-companion-user-context-dev",
-            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-dev",
-            "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
             "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
             "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
             "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
@@ -527,24 +561,24 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/wellness-companion/dev/1753268347025-2025-07-23T10:59:07.025Z/wellness-companion.zip"
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
         },
         "Handler": "functions/tracking/weight.handler",
         "Runtime": "nodejs18.x",
-        "FunctionName": "wellness-companion-dev-weight",
+        "FunctionName": "wellness-companion-prod-weight",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "STAGE": "dev",
+            "STAGE": "prod",
             "JWT_SECRET": "dev-secret-change-in-prod",
-            "USERS_TABLE": "wellness-companion-users-dev",
-            "TRACKING_TABLE": "wellness-companion-tracking-dev",
-            "REMINDERS_TABLE": "wellness-companion-reminders-dev",
-            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-dev",
-            "USER_CONTEXT_TABLE": "wellness-companion-user-context-dev",
-            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-dev",
-            "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
             "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
             "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
             "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
@@ -570,24 +604,24 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/wellness-companion/dev/1753268347025-2025-07-23T10:59:07.025Z/wellness-companion.zip"
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
         },
         "Handler": "functions/tracking/supplement.handler",
         "Runtime": "nodejs18.x",
-        "FunctionName": "wellness-companion-dev-supplement",
+        "FunctionName": "wellness-companion-prod-supplement",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "STAGE": "dev",
+            "STAGE": "prod",
             "JWT_SECRET": "dev-secret-change-in-prod",
-            "USERS_TABLE": "wellness-companion-users-dev",
-            "TRACKING_TABLE": "wellness-companion-tracking-dev",
-            "REMINDERS_TABLE": "wellness-companion-reminders-dev",
-            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-dev",
-            "USER_CONTEXT_TABLE": "wellness-companion-user-context-dev",
-            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-dev",
-            "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
             "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
             "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
             "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
@@ -613,24 +647,24 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/wellness-companion/dev/1753268347025-2025-07-23T10:59:07.025Z/wellness-companion.zip"
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
         },
         "Handler": "functions/tracking/history.handler",
         "Runtime": "nodejs18.x",
-        "FunctionName": "wellness-companion-dev-history",
+        "FunctionName": "wellness-companion-prod-history",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "STAGE": "dev",
+            "STAGE": "prod",
             "JWT_SECRET": "dev-secret-change-in-prod",
-            "USERS_TABLE": "wellness-companion-users-dev",
-            "TRACKING_TABLE": "wellness-companion-tracking-dev",
-            "REMINDERS_TABLE": "wellness-companion-reminders-dev",
-            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-dev",
-            "USER_CONTEXT_TABLE": "wellness-companion-user-context-dev",
-            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-dev",
-            "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
             "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
             "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
             "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
@@ -656,24 +690,24 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/wellness-companion/dev/1753268347025-2025-07-23T10:59:07.025Z/wellness-companion.zip"
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
         },
         "Handler": "functions/notifications/subscribe.handler",
         "Runtime": "nodejs18.x",
-        "FunctionName": "wellness-companion-dev-notificationSubscribe",
+        "FunctionName": "wellness-companion-prod-notificationSubscribe",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "STAGE": "dev",
+            "STAGE": "prod",
             "JWT_SECRET": "dev-secret-change-in-prod",
-            "USERS_TABLE": "wellness-companion-users-dev",
-            "TRACKING_TABLE": "wellness-companion-tracking-dev",
-            "REMINDERS_TABLE": "wellness-companion-reminders-dev",
-            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-dev",
-            "USER_CONTEXT_TABLE": "wellness-companion-user-context-dev",
-            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-dev",
-            "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
             "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
             "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
             "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
@@ -699,30 +733,30 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/wellness-companion/dev/1753268347025-2025-07-23T10:59:07.025Z/wellness-companion.zip"
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
         },
         "Handler": "functions/notifications/handler.handler",
         "Runtime": "nodejs18.x",
-        "FunctionName": "wellness-companion-dev-notificationHandler",
+        "FunctionName": "wellness-companion-prod-notificationHandler",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "STAGE": "dev",
+            "STAGE": "prod",
             "JWT_SECRET": "dev-secret-change-in-prod",
-            "USERS_TABLE": "wellness-companion-users-dev",
-            "TRACKING_TABLE": "wellness-companion-tracking-dev",
-            "REMINDERS_TABLE": "wellness-companion-reminders-dev",
-            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-dev",
-            "USER_CONTEXT_TABLE": "wellness-companion-user-context-dev",
-            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-dev",
-            "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
             "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
             "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
             "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
             "VAPID_PRIVATE_KEY": "1-Rbe8xi9Ufmoq0CxIhJpLrl5DJustXlfbO8_2FwJW8",
             "VAPID_EMAIL": "mailto:admin@wellness-companion.com",
-            "NOTIFICATION_HANDLER_FUNCTION": "wellness-companion-dev-notificationHandler"
+            "NOTIFICATION_HANDLER_FUNCTION": "wellness-companion-prod-notificationHandler"
           }
         },
         "Role": {
@@ -743,30 +777,30 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/wellness-companion/dev/1753268347025-2025-07-23T10:59:07.025Z/wellness-companion.zip"
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
         },
-        "Handler": "functions/notifications/scheduledTrigger.handler",
+        "Handler": "functions/notifications/enhanced-trigger.handler",
         "Runtime": "nodejs18.x",
-        "FunctionName": "wellness-companion-dev-scheduledNotificationTrigger",
+        "FunctionName": "wellness-companion-prod-scheduledNotificationTrigger",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "STAGE": "dev",
+            "STAGE": "prod",
             "JWT_SECRET": "dev-secret-change-in-prod",
-            "USERS_TABLE": "wellness-companion-users-dev",
-            "TRACKING_TABLE": "wellness-companion-tracking-dev",
-            "REMINDERS_TABLE": "wellness-companion-reminders-dev",
-            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-dev",
-            "USER_CONTEXT_TABLE": "wellness-companion-user-context-dev",
-            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-dev",
-            "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
             "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
             "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
             "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
             "VAPID_PRIVATE_KEY": "1-Rbe8xi9Ufmoq0CxIhJpLrl5DJustXlfbO8_2FwJW8",
             "VAPID_EMAIL": "mailto:admin@wellness-companion.com",
-            "NOTIFICATION_HANDLER_FUNCTION": "wellness-companion-dev-notificationHandler"
+            "NOTIFICATION_HANDLER_FUNCTION": "wellness-companion-prod-intelligentNotificationSender"
           }
         },
         "Role": {
@@ -780,6 +814,49 @@
         "ScheduledNotificationTriggerLogGroup"
       ]
     },
+    "IntelligentNotificationSenderLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
+        },
+        "Handler": "functions/notifications/intelligent-sender.sendIntelligentNotification",
+        "Runtime": "nodejs18.x",
+        "FunctionName": "wellness-companion-prod-intelligentNotificationSender",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "STAGE": "prod",
+            "JWT_SECRET": "dev-secret-change-in-prod",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
+            "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
+            "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
+            "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
+            "VAPID_PRIVATE_KEY": "1-Rbe8xi9Ufmoq0CxIhJpLrl5DJustXlfbO8_2FwJW8",
+            "VAPID_EMAIL": "mailto:admin@wellness-companion.com"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "IntelligentNotificationSenderLogGroup"
+      ]
+    },
     "JournalCreateLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -787,24 +864,24 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/wellness-companion/dev/1753268347025-2025-07-23T10:59:07.025Z/wellness-companion.zip"
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
         },
         "Handler": "functions/journal/handler.createEntry",
         "Runtime": "nodejs18.x",
-        "FunctionName": "wellness-companion-dev-journalCreate",
+        "FunctionName": "wellness-companion-prod-journalCreate",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "STAGE": "dev",
+            "STAGE": "prod",
             "JWT_SECRET": "dev-secret-change-in-prod",
-            "USERS_TABLE": "wellness-companion-users-dev",
-            "TRACKING_TABLE": "wellness-companion-tracking-dev",
-            "REMINDERS_TABLE": "wellness-companion-reminders-dev",
-            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-dev",
-            "USER_CONTEXT_TABLE": "wellness-companion-user-context-dev",
-            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-dev",
-            "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
             "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
             "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
             "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
@@ -830,24 +907,24 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/wellness-companion/dev/1753268347025-2025-07-23T10:59:07.025Z/wellness-companion.zip"
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
         },
         "Handler": "functions/journal/handler.getEntries",
         "Runtime": "nodejs18.x",
-        "FunctionName": "wellness-companion-dev-journalList",
+        "FunctionName": "wellness-companion-prod-journalList",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "STAGE": "dev",
+            "STAGE": "prod",
             "JWT_SECRET": "dev-secret-change-in-prod",
-            "USERS_TABLE": "wellness-companion-users-dev",
-            "TRACKING_TABLE": "wellness-companion-tracking-dev",
-            "REMINDERS_TABLE": "wellness-companion-reminders-dev",
-            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-dev",
-            "USER_CONTEXT_TABLE": "wellness-companion-user-context-dev",
-            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-dev",
-            "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
             "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
             "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
             "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
@@ -873,24 +950,24 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/wellness-companion/dev/1753268347025-2025-07-23T10:59:07.025Z/wellness-companion.zip"
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
         },
         "Handler": "functions/journal/handler.getEntry",
         "Runtime": "nodejs18.x",
-        "FunctionName": "wellness-companion-dev-journalGet",
+        "FunctionName": "wellness-companion-prod-journalGet",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "STAGE": "dev",
+            "STAGE": "prod",
             "JWT_SECRET": "dev-secret-change-in-prod",
-            "USERS_TABLE": "wellness-companion-users-dev",
-            "TRACKING_TABLE": "wellness-companion-tracking-dev",
-            "REMINDERS_TABLE": "wellness-companion-reminders-dev",
-            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-dev",
-            "USER_CONTEXT_TABLE": "wellness-companion-user-context-dev",
-            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-dev",
-            "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
             "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
             "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
             "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
@@ -916,24 +993,24 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/wellness-companion/dev/1753268347025-2025-07-23T10:59:07.025Z/wellness-companion.zip"
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
         },
         "Handler": "functions/journal/handler.updateEntry",
         "Runtime": "nodejs18.x",
-        "FunctionName": "wellness-companion-dev-journalUpdate",
+        "FunctionName": "wellness-companion-prod-journalUpdate",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "STAGE": "dev",
+            "STAGE": "prod",
             "JWT_SECRET": "dev-secret-change-in-prod",
-            "USERS_TABLE": "wellness-companion-users-dev",
-            "TRACKING_TABLE": "wellness-companion-tracking-dev",
-            "REMINDERS_TABLE": "wellness-companion-reminders-dev",
-            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-dev",
-            "USER_CONTEXT_TABLE": "wellness-companion-user-context-dev",
-            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-dev",
-            "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
             "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
             "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
             "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
@@ -959,24 +1036,24 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/wellness-companion/dev/1753268347025-2025-07-23T10:59:07.025Z/wellness-companion.zip"
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
         },
         "Handler": "functions/journal/handler.deleteEntry",
         "Runtime": "nodejs18.x",
-        "FunctionName": "wellness-companion-dev-journalDelete",
+        "FunctionName": "wellness-companion-prod-journalDelete",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "STAGE": "dev",
+            "STAGE": "prod",
             "JWT_SECRET": "dev-secret-change-in-prod",
-            "USERS_TABLE": "wellness-companion-users-dev",
-            "TRACKING_TABLE": "wellness-companion-tracking-dev",
-            "REMINDERS_TABLE": "wellness-companion-reminders-dev",
-            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-dev",
-            "USER_CONTEXT_TABLE": "wellness-companion-user-context-dev",
-            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-dev",
-            "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
             "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
             "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
             "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
@@ -995,6 +1072,135 @@
         "JournalDeleteLogGroup"
       ]
     },
+    "JournalProcessLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
+        },
+        "Handler": "functions/journal/process-entry.handler",
+        "Runtime": "nodejs18.x",
+        "FunctionName": "wellness-companion-prod-journalProcess",
+        "MemorySize": 1024,
+        "Timeout": 30,
+        "Environment": {
+          "Variables": {
+            "STAGE": "prod",
+            "JWT_SECRET": "dev-secret-change-in-prod",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
+            "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
+            "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
+            "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
+            "VAPID_PRIVATE_KEY": "1-Rbe8xi9Ufmoq0CxIhJpLrl5DJustXlfbO8_2FwJW8",
+            "VAPID_EMAIL": "mailto:admin@wellness-companion.com"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "JournalProcessLogGroup"
+      ]
+    },
+    "JournalSearchLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
+        },
+        "Handler": "functions/journal/search.handler",
+        "Runtime": "nodejs18.x",
+        "FunctionName": "wellness-companion-prod-journalSearch",
+        "MemorySize": 1024,
+        "Timeout": 30,
+        "Environment": {
+          "Variables": {
+            "STAGE": "prod",
+            "JWT_SECRET": "dev-secret-change-in-prod",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
+            "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
+            "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
+            "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
+            "VAPID_PRIVATE_KEY": "1-Rbe8xi9Ufmoq0CxIhJpLrl5DJustXlfbO8_2FwJW8",
+            "VAPID_EMAIL": "mailto:admin@wellness-companion.com"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "JournalSearchLogGroup"
+      ]
+    },
+    "JournalContextLambdaFunction": {
+      "Type": "AWS::Lambda::Function",
+      "Properties": {
+        "Code": {
+          "S3Bucket": {
+            "Ref": "ServerlessDeploymentBucket"
+          },
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
+        },
+        "Handler": "functions/journal/context.handler",
+        "Runtime": "nodejs18.x",
+        "FunctionName": "wellness-companion-prod-journalContext",
+        "MemorySize": 1024,
+        "Timeout": 6,
+        "Environment": {
+          "Variables": {
+            "STAGE": "prod",
+            "JWT_SECRET": "dev-secret-change-in-prod",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
+            "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
+            "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
+            "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
+            "VAPID_PRIVATE_KEY": "1-Rbe8xi9Ufmoq0CxIhJpLrl5DJustXlfbO8_2FwJW8",
+            "VAPID_EMAIL": "mailto:admin@wellness-companion.com"
+          }
+        },
+        "Role": {
+          "Fn::GetAtt": [
+            "IamRoleLambdaExecution",
+            "Arn"
+          ]
+        }
+      },
+      "DependsOn": [
+        "JournalContextLogGroup"
+      ]
+    },
     "AuthorizerFuncLambdaFunction": {
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -1002,24 +1208,24 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/wellness-companion/dev/1753268347025-2025-07-23T10:59:07.025Z/wellness-companion.zip"
+          "S3Key": "serverless/wellness-companion/prod/1753278643339-2025-07-23T13:50:43.339Z/wellness-companion.zip"
         },
         "Handler": "functions/auth/authorizer.handler",
         "Runtime": "nodejs18.x",
-        "FunctionName": "wellness-companion-dev-authorizerFunc",
+        "FunctionName": "wellness-companion-prod-authorizerFunc",
         "MemorySize": 1024,
         "Timeout": 6,
         "Environment": {
           "Variables": {
-            "STAGE": "dev",
+            "STAGE": "prod",
             "JWT_SECRET": "dev-secret-change-in-prod",
-            "USERS_TABLE": "wellness-companion-users-dev",
-            "TRACKING_TABLE": "wellness-companion-tracking-dev",
-            "REMINDERS_TABLE": "wellness-companion-reminders-dev",
-            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-dev",
-            "USER_CONTEXT_TABLE": "wellness-companion-user-context-dev",
-            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-dev",
-            "PHOTOS_BUCKET": "wellness-companion-photos-dev",
+            "USERS_TABLE": "wellness-companion-users-prod",
+            "TRACKING_TABLE": "wellness-companion-tracking-prod",
+            "REMINDERS_TABLE": "wellness-companion-reminders-prod",
+            "JOURNAL_ENTRIES_TABLE": "wellness-companion-journal-entries-prod",
+            "USER_CONTEXT_TABLE": "wellness-companion-user-context-prod",
+            "INSIGHT_QUEUE_TABLE": "wellness-companion-insight-queue-prod",
+            "PHOTOS_BUCKET": "wellness-companion-photos-prod",
             "COGNITO_USER_POOL_ID": "us-east-1_fTxU26uy4",
             "COGNITO_CLIENT_ID": "3i8iauebg4sseeh6qdlstncmh9",
             "VAPID_PUBLIC_KEY": "BP83nSNqLs_KnH2iFtIvJqAIMVMQtFFlTevsgz5o1nzZHhfozU9YGXwNkpSGnIB6e_4FEnXTX9x8jxS5YcI4lqA",
@@ -1038,174 +1244,214 @@
         "AuthorizerFuncLogGroup"
       ]
     },
-    "RegisterLambdaVersionbLKYccmQAHgsZGuZp5xxwEfIhWobA97Easf2IqRaIM": {
+    "RegisterLambdaVersionvrA2kpmG65gAv71qc8sohgFtbbCW2V9IQvMhM24h5qc": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "RegisterLambdaFunction"
         },
-        "CodeSha256": "uPOvJYLL1C1Lx2jsuQ7RW2iSa/buHolqyf5tEgAuaYI="
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
       }
     },
-    "LoginLambdaVersionvdTrlerZwMzN7Uwv6hkTWor0j7Z3sJEaoFxNlkpHwE": {
+    "LoginLambdaVersionDZkmnb3BveAI92OYDrn2kJG4W4Uo3A6I9ClQX7CM4OY": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "LoginLambdaFunction"
         },
-        "CodeSha256": "uPOvJYLL1C1Lx2jsuQ7RW2iSa/buHolqyf5tEgAuaYI="
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
       }
     },
-    "ProfileLambdaVersionYh4qbmjTYGD2pZY3KIJzPzlLkIOp07FdtWseXvVis": {
+    "ProfileLambdaVersionKws9ImtIxNmZpuGmuu39WbFQuu1bh2AAjlekKPo3ed0": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ProfileLambdaFunction"
         },
-        "CodeSha256": "uPOvJYLL1C1Lx2jsuQ7RW2iSa/buHolqyf5tEgAuaYI="
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
       }
     },
-    "CheckinLambdaVersionUmZKBkxKIhh1ndYoVShjgrYxw23HYIU02NGlvCsu28": {
+    "CheckinLambdaVersionjWz5hCTNmqrV8Fez3yuLAPsmTzaWGkf1Ae2ps8RGk6Y": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "CheckinLambdaFunction"
         },
-        "CodeSha256": "uPOvJYLL1C1Lx2jsuQ7RW2iSa/buHolqyf5tEgAuaYI="
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
       }
     },
-    "PhotoLambdaVersions0ogwQl1dOuaOQmyJqU475zcqfpxsD19x7xYR54BI": {
+    "PhotoLambdaVersionzbzahZ3tkAYurI5meNdkTEOJpi9MCJzIrPZ5xBtp2E": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "PhotoLambdaFunction"
         },
-        "CodeSha256": "uPOvJYLL1C1Lx2jsuQ7RW2iSa/buHolqyf5tEgAuaYI="
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
       }
     },
-    "WeightLambdaVersionrhL9tTldNmR0COj4JkIVU7Pw7iax9sIVJ3pDqnOiEA": {
+    "WeightLambdaVersionFKGUB4gfuzem2K6TRdPHvY2v3cP9hlVuis56Ax0yxc": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "WeightLambdaFunction"
         },
-        "CodeSha256": "uPOvJYLL1C1Lx2jsuQ7RW2iSa/buHolqyf5tEgAuaYI="
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
       }
     },
-    "SupplementLambdaVersiontFCQcrC91noLSJI0xM4tQkT2jmaVLA59kyS720YwlE": {
+    "SupplementLambdaVersionL4yJmpvRnzPaBxn1UAWMqF2Hkejjj5XCQfETYMWZxo": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "SupplementLambdaFunction"
         },
-        "CodeSha256": "uPOvJYLL1C1Lx2jsuQ7RW2iSa/buHolqyf5tEgAuaYI="
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
       }
     },
-    "HistoryLambdaVersiongOyFa1kM6WERmFPHxX4r89wUWOGxjLxPyXNw": {
+    "HistoryLambdaVersionDDiqrJzlljRbC8HVgzZLPoKqMjIvY5GyhVg0q9KRk": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "HistoryLambdaFunction"
         },
-        "CodeSha256": "uPOvJYLL1C1Lx2jsuQ7RW2iSa/buHolqyf5tEgAuaYI="
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
       }
     },
-    "NotificationSubscribeLambdaVersionSsWSh39H80SvMY92IHgXhQHti1iR4pWe0mxJdOJL9s": {
+    "NotificationSubscribeLambdaVersionRtSTUGskzF994gsiZfF77Wrp9WXJ9uQVJejHlz2WA": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "NotificationSubscribeLambdaFunction"
         },
-        "CodeSha256": "uPOvJYLL1C1Lx2jsuQ7RW2iSa/buHolqyf5tEgAuaYI="
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
       }
     },
-    "NotificationHandlerLambdaVersionXIXPYzYYmlzPCA8BKZ6eWCvYVunB1vS5SeHFo7Pc": {
+    "NotificationHandlerLambdaVersionomiYsOAZho8YIheUvNOQRVATSbPt1SaZrJr8Og8": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "NotificationHandlerLambdaFunction"
         },
-        "CodeSha256": "uPOvJYLL1C1Lx2jsuQ7RW2iSa/buHolqyf5tEgAuaYI="
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
       }
     },
-    "ScheduledNotificationTriggerLambdaVersionv8NoUBsilVSCvqsvbxxRvc5XJyFwcpHf7o4WGhwBEY": {
+    "ScheduledNotificationTriggerLambdaVersionM8Olzs8VetIr96pmZicUFkUMufFEry6GKnekTo9IKE": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "ScheduledNotificationTriggerLambdaFunction"
         },
-        "CodeSha256": "uPOvJYLL1C1Lx2jsuQ7RW2iSa/buHolqyf5tEgAuaYI="
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
       }
     },
-    "JournalCreateLambdaVersion7pcEp7ugesueacxqlSKt9jAwYmKSHFtp9rPBzMniL4g": {
+    "IntelligentNotificationSenderLambdaVersiondY5O8DWpaMV4BHTJccWT63ZQKlvoObKfGtY7zSuJA": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "IntelligentNotificationSenderLambdaFunction"
+        },
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
+      }
+    },
+    "JournalCreateLambdaVersionXfVdoTbnCo7pudSDlXF3cFr3Ds882X8YGlk2tU0VFY": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "JournalCreateLambdaFunction"
         },
-        "CodeSha256": "uPOvJYLL1C1Lx2jsuQ7RW2iSa/buHolqyf5tEgAuaYI="
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
       }
     },
-    "JournalListLambdaVersionWw9z20FCKwMQYwyWDH3I8vNwgnIT0o7eZCkp70SVIo": {
+    "JournalListLambdaVersionuOUjRjoEd0hTk8g0sszl7Q9GfuDVtWcsxWKtF8ZeXQ": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "JournalListLambdaFunction"
         },
-        "CodeSha256": "uPOvJYLL1C1Lx2jsuQ7RW2iSa/buHolqyf5tEgAuaYI="
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
       }
     },
-    "JournalGetLambdaVersionjLeGj9MGNrwt2ISCeakiBI2aYcsAUTHnzl58xd0": {
+    "JournalGetLambdaVersionZKhwaz9BjKY8F1808n7HS9S0Vc9HQacIOQJfkHVM": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "JournalGetLambdaFunction"
         },
-        "CodeSha256": "uPOvJYLL1C1Lx2jsuQ7RW2iSa/buHolqyf5tEgAuaYI="
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
       }
     },
-    "JournalUpdateLambdaVersionyWengKEBzz70IEQ0MFQWCTqYZ45hp1SayASWlRjgy44": {
+    "JournalUpdateLambdaVersionRJ9gdbgQq47176uH9DSfGouVni6H3qbVgmt6DqJwJQ": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "JournalUpdateLambdaFunction"
         },
-        "CodeSha256": "uPOvJYLL1C1Lx2jsuQ7RW2iSa/buHolqyf5tEgAuaYI="
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
       }
     },
-    "JournalDeleteLambdaVersionk4G8l3MSA55C5s49KiMg8LIUMef85ecgjTCIqeP6zE": {
+    "JournalDeleteLambdaVersionRYKshjL6Wd9mYKDPMNRlhJC0uw5ljOdFGK3cs35LQo": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "JournalDeleteLambdaFunction"
         },
-        "CodeSha256": "uPOvJYLL1C1Lx2jsuQ7RW2iSa/buHolqyf5tEgAuaYI="
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
       }
     },
-    "AuthorizerFuncLambdaVersionbesC1R2gzhgANaIFMlukSWaj9YoCKFveXLU5gBIBs": {
+    "JournalProcessLambdaVersiontgXoxBPYspEFnHvtUKIyFaoe9gU0bUnUFLaEFmel4": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "JournalProcessLambdaFunction"
+        },
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
+      }
+    },
+    "JournalSearchLambdaVersion7AgMN7sNwKE6RTY6vpDpQhgwRjhFMrWKiJtbIvoHo": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "JournalSearchLambdaFunction"
+        },
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
+      }
+    },
+    "JournalContextLambdaVersionkM0ph4n43FNpxiXcRmXF9ZPjHfiwTBFqpxQiyrd2Pg": {
+      "Type": "AWS::Lambda::Version",
+      "DeletionPolicy": "Retain",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "JournalContextLambdaFunction"
+        },
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
+      }
+    },
+    "AuthorizerFuncLambdaVersion0TY1hlhKo5phXN4uuTATrynKFeYkTOx7O6t4v3a0E": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "AuthorizerFuncLambdaFunction"
         },
-        "CodeSha256": "uPOvJYLL1C1Lx2jsuQ7RW2iSa/buHolqyf5tEgAuaYI="
+        "CodeSha256": "/SsqStVoOymtovqS8GYhAIwV2MfYDppEFw8X+dypGlU="
       }
     },
     "ScheduledNotificationTriggerEventsRuleSchedule1": {
@@ -1363,7 +1609,7 @@
     "ApiGatewayRestApi": {
       "Type": "AWS::ApiGateway::RestApi",
       "Properties": {
-        "Name": "dev-wellness-companion",
+        "Name": "prod-wellness-companion",
         "EndpointConfiguration": {
           "Types": [
             "EDGE"
@@ -1552,6 +1798,18 @@
         }
       }
     },
+    "ApiGatewayResourceNotificationsSendDashintelligent": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceNotifications"
+        },
+        "PathPart": "send-intelligent",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
     "ApiGatewayResourceJournal": {
       "Type": "AWS::ApiGateway::Resource",
       "Properties": {
@@ -1598,6 +1856,42 @@
           "Ref": "ApiGatewayResourceJournal"
         },
         "PathPart": "entries",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceJournalProcess": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceJournal"
+        },
+        "PathPart": "process",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceJournalSearch": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceJournal"
+        },
+        "PathPart": "search",
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayResourceJournalContext": {
+      "Type": "AWS::ApiGateway::Resource",
+      "Properties": {
+        "ParentId": {
+          "Ref": "ApiGatewayResourceJournal"
+        },
+        "PathPart": "context",
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         }
@@ -2053,6 +2347,51 @@
         }
       }
     },
+    "ApiGatewayMethodNotificationsSendDashintelligentOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceNotificationsSendDashintelligent"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
     "ApiGatewayMethodJournalEntryOptions": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
@@ -2182,6 +2521,141 @@
         },
         "ResourceId": {
           "Ref": "ApiGatewayResourceJournalEntryEntryidVar"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodJournalProcessOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceJournalProcess"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodJournalSearchOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,POST'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceJournalSearch"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        }
+      }
+    },
+    "ApiGatewayMethodJournalContextOptions": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "AuthorizationType": "NONE",
+        "HttpMethod": "OPTIONS",
+        "MethodResponses": [
+          {
+            "StatusCode": "200",
+            "ResponseParameters": {
+              "method.response.header.Access-Control-Allow-Origin": true,
+              "method.response.header.Access-Control-Allow-Headers": true,
+              "method.response.header.Access-Control-Allow-Methods": true
+            },
+            "ResponseModels": {}
+          }
+        ],
+        "RequestParameters": {},
+        "Integration": {
+          "Type": "MOCK",
+          "RequestTemplates": {
+            "application/json": "{statusCode:200}"
+          },
+          "ContentHandling": "CONVERT_TO_TEXT",
+          "IntegrationResponses": [
+            {
+              "StatusCode": "200",
+              "ResponseParameters": {
+                "method.response.header.Access-Control-Allow-Origin": "'*'",
+                "method.response.header.Access-Control-Allow-Headers": "'Content-Type,X-Amz-Date,Authorization,X-Api-Key,X-Amz-Security-Token,X-Amz-User-Agent,X-Amzn-Trace-Id'",
+                "method.response.header.Access-Control-Allow-Methods": "'OPTIONS,GET'"
+              },
+              "ResponseTemplates": {
+                "application/json": ""
+              }
+            }
+          ]
+        },
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceJournalContext"
         },
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
@@ -2672,6 +3146,55 @@
         "AuthorizerFuncApiGatewayAuthorizer"
       ]
     },
+    "ApiGatewayMethodNotificationsSendDashintelligentPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceNotificationsSendDashintelligent"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "CUSTOM",
+        "AuthorizerId": {
+          "Ref": "AuthorizerFuncApiGatewayAuthorizer"
+        },
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "IntelligentNotificationSenderLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "AuthorizerFuncApiGatewayAuthorizer"
+      ]
+    },
     "ApiGatewayMethodJournalEntryPost": {
       "Type": "AWS::ApiGateway::Method",
       "Properties": {
@@ -2917,6 +3440,153 @@
         "AuthorizerFuncApiGatewayAuthorizer"
       ]
     },
+    "ApiGatewayMethodJournalProcessPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceJournalProcess"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "CUSTOM",
+        "AuthorizerId": {
+          "Ref": "AuthorizerFuncApiGatewayAuthorizer"
+        },
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "JournalProcessLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "AuthorizerFuncApiGatewayAuthorizer"
+      ]
+    },
+    "ApiGatewayMethodJournalSearchPost": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "POST",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceJournalSearch"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "CUSTOM",
+        "AuthorizerId": {
+          "Ref": "AuthorizerFuncApiGatewayAuthorizer"
+        },
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "JournalSearchLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "AuthorizerFuncApiGatewayAuthorizer"
+      ]
+    },
+    "ApiGatewayMethodJournalContextGet": {
+      "Type": "AWS::ApiGateway::Method",
+      "Properties": {
+        "HttpMethod": "GET",
+        "RequestParameters": {},
+        "ResourceId": {
+          "Ref": "ApiGatewayResourceJournalContext"
+        },
+        "RestApiId": {
+          "Ref": "ApiGatewayRestApi"
+        },
+        "ApiKeyRequired": false,
+        "AuthorizationType": "CUSTOM",
+        "AuthorizerId": {
+          "Ref": "AuthorizerFuncApiGatewayAuthorizer"
+        },
+        "Integration": {
+          "IntegrationHttpMethod": "POST",
+          "Type": "AWS_PROXY",
+          "Uri": {
+            "Fn::Join": [
+              "",
+              [
+                "arn:",
+                {
+                  "Ref": "AWS::Partition"
+                },
+                ":apigateway:",
+                {
+                  "Ref": "AWS::Region"
+                },
+                ":lambda:path/2015-03-31/functions/",
+                {
+                  "Fn::GetAtt": [
+                    "JournalContextLambdaFunction",
+                    "Arn"
+                  ]
+                },
+                "/invocations"
+              ]
+            ]
+          }
+        },
+        "MethodResponses": []
+      },
+      "DependsOn": [
+        "AuthorizerFuncApiGatewayAuthorizer"
+      ]
+    },
     "AuthorizerFuncApiGatewayAuthorizer": {
       "Type": "AWS::ApiGateway::Authorizer",
       "Properties": {
@@ -2952,13 +3622,13 @@
         "Type": "REQUEST"
       }
     },
-    "ApiGatewayDeployment1753268299797": {
+    "ApiGatewayDeployment1753278566138": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
           "Ref": "ApiGatewayRestApi"
         },
-        "StageName": "dev"
+        "StageName": "prod"
       },
       "DependsOn": [
         "ApiGatewayMethodAuthRegisterOptions",
@@ -2971,9 +3641,13 @@
         "ApiGatewayMethodTrackingHistoryOptions",
         "ApiGatewayMethodNotificationsSubscribeOptions",
         "ApiGatewayMethodNotificationsSendOptions",
+        "ApiGatewayMethodNotificationsSendDashintelligentOptions",
         "ApiGatewayMethodJournalEntryOptions",
         "ApiGatewayMethodJournalEntriesOptions",
         "ApiGatewayMethodJournalEntryEntryidVarOptions",
+        "ApiGatewayMethodJournalProcessOptions",
+        "ApiGatewayMethodJournalSearchOptions",
+        "ApiGatewayMethodJournalContextOptions",
         "ApiGatewayMethodAuthRegisterPost",
         "ApiGatewayMethodAuthLoginPost",
         "ApiGatewayMethodUserProfileGet",
@@ -2984,11 +3658,15 @@
         "ApiGatewayMethodTrackingHistoryGet",
         "ApiGatewayMethodNotificationsSubscribePost",
         "ApiGatewayMethodNotificationsSendPost",
+        "ApiGatewayMethodNotificationsSendDashintelligentPost",
         "ApiGatewayMethodJournalEntryPost",
         "ApiGatewayMethodJournalEntriesGet",
         "ApiGatewayMethodJournalEntryEntryidVarGet",
         "ApiGatewayMethodJournalEntryEntryidVarPut",
-        "ApiGatewayMethodJournalEntryEntryidVarDelete"
+        "ApiGatewayMethodJournalEntryEntryidVarDelete",
+        "ApiGatewayMethodJournalProcessPost",
+        "ApiGatewayMethodJournalSearchPost",
+        "ApiGatewayMethodJournalContextGet"
       ]
     },
     "RegisterLambdaPermissionApiGateway": {
@@ -3398,6 +4076,43 @@
         }
       }
     },
+    "IntelligentNotificationSenderLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "IntelligentNotificationSenderLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
     "JournalCreateLambdaPermissionApiGateway": {
       "Type": "AWS::Lambda::Permission",
       "Properties": {
@@ -3583,6 +4298,117 @@
         }
       }
     },
+    "JournalProcessLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "JournalProcessLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "JournalSearchLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "JournalSearchLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
+    "JournalContextLambdaPermissionApiGateway": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Fn::GetAtt": [
+            "JournalContextLambdaFunction",
+            "Arn"
+          ]
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "apigateway.amazonaws.com",
+        "SourceArn": {
+          "Fn::Join": [
+            "",
+            [
+              "arn:",
+              {
+                "Ref": "AWS::Partition"
+              },
+              ":execute-api:",
+              {
+                "Ref": "AWS::Region"
+              },
+              ":",
+              {
+                "Ref": "AWS::AccountId"
+              },
+              ":",
+              {
+                "Ref": "ApiGatewayRestApi"
+              },
+              "/*/*"
+            ]
+          ]
+        }
+      }
+    },
     "GatewayResponseDefault4XX": {
       "Type": "AWS::ApiGateway::GatewayResponse",
       "Properties": {
@@ -3614,7 +4440,7 @@
     "UsersTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "wellness-companion-users-dev",
+        "TableName": "wellness-companion-users-prod",
         "AttributeDefinitions": [
           {
             "AttributeName": "userId",
@@ -3651,7 +4477,7 @@
     "TrackingTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "wellness-companion-tracking-dev",
+        "TableName": "wellness-companion-tracking-prod",
         "AttributeDefinitions": [
           {
             "AttributeName": "userId",
@@ -3678,7 +4504,7 @@
     "RemindersTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "wellness-companion-reminders-dev",
+        "TableName": "wellness-companion-reminders-prod",
         "AttributeDefinitions": [
           {
             "AttributeName": "userId",
@@ -3705,7 +4531,7 @@
     "JournalEntriesTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "wellness-companion-journal-entries-dev",
+        "TableName": "wellness-companion-journal-entries-prod",
         "AttributeDefinitions": [
           {
             "AttributeName": "userId",
@@ -3736,7 +4562,7 @@
     "UserContextTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "wellness-companion-user-context-dev",
+        "TableName": "wellness-companion-user-context-prod",
         "AttributeDefinitions": [
           {
             "AttributeName": "userId",
@@ -3763,7 +4589,7 @@
     "InsightQueueTable": {
       "Type": "AWS::DynamoDB::Table",
       "Properties": {
-        "TableName": "wellness-companion-insight-queue-dev",
+        "TableName": "wellness-companion-insight-queue-prod",
         "AttributeDefinitions": [
           {
             "AttributeName": "userId",
@@ -3808,7 +4634,7 @@
     "PhotosBucket": {
       "Type": "AWS::S3::Bucket",
       "Properties": {
-        "BucketName": "wellness-companion-photos-dev-194722432945",
+        "BucketName": "wellness-companion-photos-prod-194722432945",
         "CorsConfiguration": {
           "CorsRules": [
             {
@@ -3846,160 +4672,196 @@
         "Ref": "ServerlessDeploymentBucket"
       },
       "Export": {
-        "Name": "sls-wellness-companion-dev-ServerlessDeploymentBucketName"
+        "Name": "sls-wellness-companion-prod-ServerlessDeploymentBucketName"
       }
     },
     "RegisterLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "RegisterLambdaVersionbLKYccmQAHgsZGuZp5xxwEfIhWobA97Easf2IqRaIM"
+        "Ref": "RegisterLambdaVersionvrA2kpmG65gAv71qc8sohgFtbbCW2V9IQvMhM24h5qc"
       },
       "Export": {
-        "Name": "sls-wellness-companion-dev-RegisterLambdaFunctionQualifiedArn"
+        "Name": "sls-wellness-companion-prod-RegisterLambdaFunctionQualifiedArn"
       }
     },
     "LoginLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "LoginLambdaVersionvdTrlerZwMzN7Uwv6hkTWor0j7Z3sJEaoFxNlkpHwE"
+        "Ref": "LoginLambdaVersionDZkmnb3BveAI92OYDrn2kJG4W4Uo3A6I9ClQX7CM4OY"
       },
       "Export": {
-        "Name": "sls-wellness-companion-dev-LoginLambdaFunctionQualifiedArn"
+        "Name": "sls-wellness-companion-prod-LoginLambdaFunctionQualifiedArn"
       }
     },
     "ProfileLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ProfileLambdaVersionYh4qbmjTYGD2pZY3KIJzPzlLkIOp07FdtWseXvVis"
+        "Ref": "ProfileLambdaVersionKws9ImtIxNmZpuGmuu39WbFQuu1bh2AAjlekKPo3ed0"
       },
       "Export": {
-        "Name": "sls-wellness-companion-dev-ProfileLambdaFunctionQualifiedArn"
+        "Name": "sls-wellness-companion-prod-ProfileLambdaFunctionQualifiedArn"
       }
     },
     "CheckinLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "CheckinLambdaVersionUmZKBkxKIhh1ndYoVShjgrYxw23HYIU02NGlvCsu28"
+        "Ref": "CheckinLambdaVersionjWz5hCTNmqrV8Fez3yuLAPsmTzaWGkf1Ae2ps8RGk6Y"
       },
       "Export": {
-        "Name": "sls-wellness-companion-dev-CheckinLambdaFunctionQualifiedArn"
+        "Name": "sls-wellness-companion-prod-CheckinLambdaFunctionQualifiedArn"
       }
     },
     "PhotoLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "PhotoLambdaVersions0ogwQl1dOuaOQmyJqU475zcqfpxsD19x7xYR54BI"
+        "Ref": "PhotoLambdaVersionzbzahZ3tkAYurI5meNdkTEOJpi9MCJzIrPZ5xBtp2E"
       },
       "Export": {
-        "Name": "sls-wellness-companion-dev-PhotoLambdaFunctionQualifiedArn"
+        "Name": "sls-wellness-companion-prod-PhotoLambdaFunctionQualifiedArn"
       }
     },
     "WeightLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "WeightLambdaVersionrhL9tTldNmR0COj4JkIVU7Pw7iax9sIVJ3pDqnOiEA"
+        "Ref": "WeightLambdaVersionFKGUB4gfuzem2K6TRdPHvY2v3cP9hlVuis56Ax0yxc"
       },
       "Export": {
-        "Name": "sls-wellness-companion-dev-WeightLambdaFunctionQualifiedArn"
+        "Name": "sls-wellness-companion-prod-WeightLambdaFunctionQualifiedArn"
       }
     },
     "SupplementLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "SupplementLambdaVersiontFCQcrC91noLSJI0xM4tQkT2jmaVLA59kyS720YwlE"
+        "Ref": "SupplementLambdaVersionL4yJmpvRnzPaBxn1UAWMqF2Hkejjj5XCQfETYMWZxo"
       },
       "Export": {
-        "Name": "sls-wellness-companion-dev-SupplementLambdaFunctionQualifiedArn"
+        "Name": "sls-wellness-companion-prod-SupplementLambdaFunctionQualifiedArn"
       }
     },
     "HistoryLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "HistoryLambdaVersiongOyFa1kM6WERmFPHxX4r89wUWOGxjLxPyXNw"
+        "Ref": "HistoryLambdaVersionDDiqrJzlljRbC8HVgzZLPoKqMjIvY5GyhVg0q9KRk"
       },
       "Export": {
-        "Name": "sls-wellness-companion-dev-HistoryLambdaFunctionQualifiedArn"
+        "Name": "sls-wellness-companion-prod-HistoryLambdaFunctionQualifiedArn"
       }
     },
     "NotificationSubscribeLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "NotificationSubscribeLambdaVersionSsWSh39H80SvMY92IHgXhQHti1iR4pWe0mxJdOJL9s"
+        "Ref": "NotificationSubscribeLambdaVersionRtSTUGskzF994gsiZfF77Wrp9WXJ9uQVJejHlz2WA"
       },
       "Export": {
-        "Name": "sls-wellness-companion-dev-NotificationSubscribeLambdaFunctionQualifiedArn"
+        "Name": "sls-wellness-companion-prod-NotificationSubscribeLambdaFunctionQualifiedArn"
       }
     },
     "NotificationHandlerLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "NotificationHandlerLambdaVersionXIXPYzYYmlzPCA8BKZ6eWCvYVunB1vS5SeHFo7Pc"
+        "Ref": "NotificationHandlerLambdaVersionomiYsOAZho8YIheUvNOQRVATSbPt1SaZrJr8Og8"
       },
       "Export": {
-        "Name": "sls-wellness-companion-dev-NotificationHandlerLambdaFunctionQualifiedArn"
+        "Name": "sls-wellness-companion-prod-NotificationHandlerLambdaFunctionQualifiedArn"
       }
     },
     "ScheduledNotificationTriggerLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "ScheduledNotificationTriggerLambdaVersionv8NoUBsilVSCvqsvbxxRvc5XJyFwcpHf7o4WGhwBEY"
+        "Ref": "ScheduledNotificationTriggerLambdaVersionM8Olzs8VetIr96pmZicUFkUMufFEry6GKnekTo9IKE"
       },
       "Export": {
-        "Name": "sls-wellness-companion-dev-ScheduledNotificationTriggerLambdaFunctionQualifiedArn"
+        "Name": "sls-wellness-companion-prod-ScheduledNotificationTriggerLambdaFunctionQualifiedArn"
+      }
+    },
+    "IntelligentNotificationSenderLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "IntelligentNotificationSenderLambdaVersiondY5O8DWpaMV4BHTJccWT63ZQKlvoObKfGtY7zSuJA"
+      },
+      "Export": {
+        "Name": "sls-wellness-companion-prod-IntelligentNotificationSenderLambdaFunctionQualifiedArn"
       }
     },
     "JournalCreateLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "JournalCreateLambdaVersion7pcEp7ugesueacxqlSKt9jAwYmKSHFtp9rPBzMniL4g"
+        "Ref": "JournalCreateLambdaVersionXfVdoTbnCo7pudSDlXF3cFr3Ds882X8YGlk2tU0VFY"
       },
       "Export": {
-        "Name": "sls-wellness-companion-dev-JournalCreateLambdaFunctionQualifiedArn"
+        "Name": "sls-wellness-companion-prod-JournalCreateLambdaFunctionQualifiedArn"
       }
     },
     "JournalListLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "JournalListLambdaVersionWw9z20FCKwMQYwyWDH3I8vNwgnIT0o7eZCkp70SVIo"
+        "Ref": "JournalListLambdaVersionuOUjRjoEd0hTk8g0sszl7Q9GfuDVtWcsxWKtF8ZeXQ"
       },
       "Export": {
-        "Name": "sls-wellness-companion-dev-JournalListLambdaFunctionQualifiedArn"
+        "Name": "sls-wellness-companion-prod-JournalListLambdaFunctionQualifiedArn"
       }
     },
     "JournalGetLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "JournalGetLambdaVersionjLeGj9MGNrwt2ISCeakiBI2aYcsAUTHnzl58xd0"
+        "Ref": "JournalGetLambdaVersionZKhwaz9BjKY8F1808n7HS9S0Vc9HQacIOQJfkHVM"
       },
       "Export": {
-        "Name": "sls-wellness-companion-dev-JournalGetLambdaFunctionQualifiedArn"
+        "Name": "sls-wellness-companion-prod-JournalGetLambdaFunctionQualifiedArn"
       }
     },
     "JournalUpdateLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "JournalUpdateLambdaVersionyWengKEBzz70IEQ0MFQWCTqYZ45hp1SayASWlRjgy44"
+        "Ref": "JournalUpdateLambdaVersionRJ9gdbgQq47176uH9DSfGouVni6H3qbVgmt6DqJwJQ"
       },
       "Export": {
-        "Name": "sls-wellness-companion-dev-JournalUpdateLambdaFunctionQualifiedArn"
+        "Name": "sls-wellness-companion-prod-JournalUpdateLambdaFunctionQualifiedArn"
       }
     },
     "JournalDeleteLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "JournalDeleteLambdaVersionk4G8l3MSA55C5s49KiMg8LIUMef85ecgjTCIqeP6zE"
+        "Ref": "JournalDeleteLambdaVersionRYKshjL6Wd9mYKDPMNRlhJC0uw5ljOdFGK3cs35LQo"
       },
       "Export": {
-        "Name": "sls-wellness-companion-dev-JournalDeleteLambdaFunctionQualifiedArn"
+        "Name": "sls-wellness-companion-prod-JournalDeleteLambdaFunctionQualifiedArn"
+      }
+    },
+    "JournalProcessLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "JournalProcessLambdaVersiontgXoxBPYspEFnHvtUKIyFaoe9gU0bUnUFLaEFmel4"
+      },
+      "Export": {
+        "Name": "sls-wellness-companion-prod-JournalProcessLambdaFunctionQualifiedArn"
+      }
+    },
+    "JournalSearchLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "JournalSearchLambdaVersion7AgMN7sNwKE6RTY6vpDpQhgwRjhFMrWKiJtbIvoHo"
+      },
+      "Export": {
+        "Name": "sls-wellness-companion-prod-JournalSearchLambdaFunctionQualifiedArn"
+      }
+    },
+    "JournalContextLambdaFunctionQualifiedArn": {
+      "Description": "Current Lambda function version",
+      "Value": {
+        "Ref": "JournalContextLambdaVersionkM0ph4n43FNpxiXcRmXF9ZPjHfiwTBFqpxQiyrd2Pg"
+      },
+      "Export": {
+        "Name": "sls-wellness-companion-prod-JournalContextLambdaFunctionQualifiedArn"
       }
     },
     "AuthorizerFuncLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "AuthorizerFuncLambdaVersionbesC1R2gzhgANaIFMlukSWaj9YoCKFveXLU5gBIBs"
+        "Ref": "AuthorizerFuncLambdaVersion0TY1hlhKo5phXN4uuTATrynKFeYkTOx7O6t4v3a0E"
       },
       "Export": {
-        "Name": "sls-wellness-companion-dev-AuthorizerFuncLambdaFunctionQualifiedArn"
+        "Name": "sls-wellness-companion-prod-AuthorizerFuncLambdaFunctionQualifiedArn"
       }
     },
     "ServiceEndpoint": {
@@ -4020,12 +4882,12 @@
             {
               "Ref": "AWS::URLSuffix"
             },
-            "/dev"
+            "/prod"
           ]
         ]
       },
       "Export": {
-        "Name": "sls-wellness-companion-dev-ServiceEndpoint"
+        "Name": "sls-wellness-companion-prod-ServiceEndpoint"
       }
     }
   }

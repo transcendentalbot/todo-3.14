@@ -30,7 +30,7 @@ export const handler: APIGatewayProxyHandler = async (event) => {
 
     // Update journal entry with insights
     if (emotionAnalysis || extractedTasks.length > 0 || embedding) {
-      const updateParams: AWS.DynamoDB.DocumentClient.UpdateInput = {
+      const updateParams: AWS.DynamoDB.DocumentClient.UpdateItemInput = {
         TableName: JOURNAL_ENTRIES_TABLE,
         Key: {
           userId: `USER#${userId}`,

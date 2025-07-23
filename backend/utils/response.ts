@@ -11,3 +11,7 @@ export const createResponse = (statusCode: number, body: any): APIGatewayProxyRe
     body: JSON.stringify(body),
   };
 };
+
+export const createErrorResponse = (statusCode: number, message: string): APIGatewayProxyResult => {
+  return createResponse(statusCode, { message });
+};
