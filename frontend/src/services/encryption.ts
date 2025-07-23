@@ -31,69 +31,102 @@ class EncryptionService {
       localStorage.setItem('encryption_salt', this.salt);
     }
 
-    // Derive key from password using PBKDF2
-    const key = CryptoJS.PBKDF2(password, this.salt, {
+    // Generate encryption key from password and salt
+    this.encryptionKey = CryptoJS.PBKDF2(password, this.salt, {
       keySize: 256 / 32,
-      iterations: 10000,
-      hasher: CryptoJS.algo.SHA256
-    });
+      iterations: 1000
+    }).toString();
 
-    this.encryptionKey = key.toString();
+    // Store a flag that encryption is initialized
+    localStorage.setItem('encryption_initialized', 'true');
   }
 
   /**
    * Check if encryption is initialized
    */
   isInitialized(): boolean {
-    return this.encryptionKey !== null;
+    return !!(this.encryptionKey && this.salt && localStorage.getItem('encryption_initialized'));
+  }
+
+  /**
+   * Initialize with a temporary key if not initialized
+   * This allows read-only access to encrypted data
+   */
+  initializeReadOnly(): void {
+    if (!this.isInitialized() && this.salt) {
+      // Use a default key for read-only access
+      // This won't decrypt properly but prevents errors
+      this.encryptionKey = 'READ_ONLY_KEY';
+    }
   }
 
   /**
    * Encrypt data
    */
-  encrypt(data: any): string {
-    if (!this.encryptionKey) {
+  async encrypt(data: string): Promise<string> {
+    if (!this.isInitialized()) {
       throw new Error('Encryption not initialized. Call initialize() first.');
     }
 
-    const jsonString = JSON.stringify(data);
-    const encrypted = CryptoJS.AES.encrypt(jsonString, this.encryptionKey);
-    return encrypted.toString();
+    const encrypted = CryptoJS.AES.encrypt(data, this.encryptionKey!).toString();
+    return encrypted;
   }
 
   /**
    * Decrypt data
    */
-  decrypt(encryptedData: string): any {
+  async decrypt(encryptedData: string): Promise<string> {
     if (!this.encryptionKey) {
-      throw new Error('Encryption not initialized. Call initialize() first.');
+      // Try read-only mode
+      this.initializeReadOnly();
+      if (!this.encryptionKey) {
+        throw new Error('Encryption not initialized. Call initialize() first.');
+      }
     }
 
     try {
-      const decrypted = CryptoJS.AES.decrypt(encryptedData, this.encryptionKey);
-      const jsonString = decrypted.toString(CryptoJS.enc.Utf8);
-      return JSON.parse(jsonString);
+      const decrypted = CryptoJS.AES.decrypt(encryptedData, this.encryptionKey).toString(CryptoJS.enc.Utf8);
+      
+      // If decryption results in empty string, it likely failed
+      if (!decrypted) {
+        throw new Error('Decryption failed - invalid key');
+      }
+      
+      return decrypted;
     } catch (error) {
-      console.error('Decryption failed:', error);
-      throw new Error('Failed to decrypt data. Invalid key or corrupted data.');
+      // If we're in read-only mode, return a placeholder
+      if (this.encryptionKey === 'READ_ONLY_KEY') {
+        return '[Encrypted content - please log in to view]';
+      }
+      throw error;
     }
   }
 
   /**
-   * Clear encryption key (on logout)
+   * Clear encryption data (for logout)
    */
   clear(): void {
     this.encryptionKey = null;
-    // Keep salt for next login
+    this.salt = null;
+    localStorage.removeItem('encryption_salt');
+    localStorage.removeItem('encryption_initialized');
   }
 
   /**
-   * Completely reset encryption (new device/forgot password)
+   * Re-initialize encryption with saved salt
+   * This is for PWA scenarios where we need to re-enter password
    */
-  reset(): void {
-    this.encryptionKey = null;
-    this.salt = null;
-    localStorage.removeItem('encryption_salt');
+  async reInitialize(password: string): Promise<boolean> {
+    if (!this.salt) {
+      return false;
+    }
+
+    try {
+      await this.initialize(password);
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 }
 

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import VoiceInput from '../components/VoiceInput';
+import EncryptionPrompt from '../components/EncryptionPrompt';
 import { journalService, type JournalEntry } from '../services/journal';
+import encryptionService from '../services/encryption';
 
 const Journal: React.FC = () => {
   const navigate = useNavigate();
@@ -11,6 +13,7 @@ const Journal: React.FC = () => {
   const [selectedEntry, setSelectedEntry] = useState<JournalEntry | null>(null);
   const [showNewEntry, setShowNewEntry] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
+  const [showEncryptionPrompt, setShowEncryptionPrompt] = useState(false);
 
   useEffect(() => {
     loadEntries();
@@ -21,8 +24,12 @@ const Journal: React.FC = () => {
       setIsLoading(true);
       const { entries } = await journalService.getEntries();
       setEntries(entries);
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to load journal entries:', error);
+      // Check if encryption is not initialized
+      if (error.message?.includes('Encryption not initialized') && !encryptionService.isInitialized()) {
+        setShowEncryptionPrompt(true);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -46,9 +53,8 @@ const Journal: React.FC = () => {
       await loadEntries();
     } catch (error: any) {
       console.error('Failed to save journal entry:', error);
-      if (error.message?.includes('Encryption not initialized')) {
-        alert('Please log out and log back in to enable journal encryption');
-        navigate('/login');
+      if (error.message?.includes('Encryption not initialized') && !encryptionService.isInitialized()) {
+        setShowEncryptionPrompt(true);
       } else {
         alert('Failed to save journal entry');
       }
@@ -294,6 +300,20 @@ const Journal: React.FC = () => {
             </div>
           </div>
         </div>
+      )}
+
+      {/* Encryption Prompt Modal */}
+      {showEncryptionPrompt && (
+        <EncryptionPrompt
+          onSuccess={() => {
+            setShowEncryptionPrompt(false);
+            loadEntries();
+          }}
+          onCancel={() => {
+            setShowEncryptionPrompt(false);
+            navigate('/dashboard');
+          }}
+        />
       )}
     </div>
   );
