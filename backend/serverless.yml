@@ -13,6 +13,9 @@ provider:
     USERS_TABLE: ${self:service}-users-${self:provider.stage}
     TRACKING_TABLE: ${self:service}-tracking-${self:provider.stage}
     REMINDERS_TABLE: ${self:service}-reminders-${self:provider.stage}
+    JOURNAL_ENTRIES_TABLE: ${self:service}-journal-entries-${self:provider.stage}
+    USER_CONTEXT_TABLE: ${self:service}-user-context-${self:provider.stage}
+    INSIGHT_QUEUE_TABLE: ${self:service}-insight-queue-${self:provider.stage}
     PHOTOS_BUCKET: ${self:service}-photos-${self:provider.stage}
     COGNITO_USER_POOL_ID: us-east-1_fTxU26uy4
     COGNITO_CLIENT_ID: 3i8iauebg4sseeh6qdlstncmh9
@@ -34,8 +37,12 @@ provider:
             - arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.USERS_TABLE}
             - arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.TRACKING_TABLE}
             - arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.REMINDERS_TABLE}
+            - arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.JOURNAL_ENTRIES_TABLE}
+            - arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.USER_CONTEXT_TABLE}
+            - arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.INSIGHT_QUEUE_TABLE}
             - arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.USERS_TABLE}/index/*
             - arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.TRACKING_TABLE}/index/*
+            - arn:aws:dynamodb:${aws:region}:*:table/${self:provider.environment.INSIGHT_QUEUE_TABLE}/index/*
         - Effect: Allow
           Action:
             - s3:PutObject
@@ -59,6 +66,12 @@ provider:
             - lambda:InvokeFunction
           Resource:
             - arn:aws:lambda:${aws:region}:*:function:${self:service}-${self:provider.stage}-notificationHandler
+        - Effect: Allow
+          Action:
+            - bedrock:InvokeModel
+          Resource:
+            - arn:aws:bedrock:${aws:region}::foundation-model/anthropic.claude-3-haiku-20240307-v1:0
+            - arn:aws:bedrock:${aws:region}::foundation-model/amazon.titan-embed-text-v1
 
 plugins:
   - serverless-plugin-typescript
@@ -183,9 +196,9 @@ functions:
             type: request
 
   scheduledNotificationTrigger:
-    handler: functions/notifications/scheduledTrigger.handler
+    handler: functions/notifications/enhanced-trigger.handler
     environment:
-      NOTIFICATION_HANDLER_FUNCTION: ${self:service}-${self:provider.stage}-notificationHandler
+      NOTIFICATION_HANDLER_FUNCTION: ${self:service}-${self:provider.stage}-intelligentNotificationSender
     events:
       - schedule: 
           rate: cron(0 7 * * ? *)  # 7 AM UTC daily
@@ -203,6 +216,108 @@ functions:
           rate: cron(0 21 * * ? *)  # 9 PM UTC daily
           input:
             detail-type: evening
+  
+  intelligentNotificationSender:
+    handler: functions/notifications/intelligent-sender.sendIntelligentNotification
+    events:
+      - http:
+          path: notifications/send-intelligent
+          method: post
+          cors: true
+          authorizer:
+            name: authorizerFunc
+            type: request
+
+  # Journal endpoints
+  journalCreate:
+    handler: functions/journal/handler.createEntry
+    events:
+      - http:
+          path: journal/entry
+          method: post
+          cors: true
+          authorizer:
+            name: authorizerFunc
+            type: request
+
+  journalList:
+    handler: functions/journal/handler.getEntries
+    events:
+      - http:
+          path: journal/entries
+          method: get
+          cors: true
+          authorizer:
+            name: authorizerFunc
+            type: request
+
+  journalGet:
+    handler: functions/journal/handler.getEntry
+    events:
+      - http:
+          path: journal/entry/{entryId}
+          method: get
+          cors: true
+          authorizer:
+            name: authorizerFunc
+            type: request
+
+  journalUpdate:
+    handler: functions/journal/handler.updateEntry
+    events:
+      - http:
+          path: journal/entry/{entryId}
+          method: put
+          cors: true
+          authorizer:
+            name: authorizerFunc
+            type: request
+
+  journalDelete:
+    handler: functions/journal/handler.deleteEntry
+    events:
+      - http:
+          path: journal/entry/{entryId}
+          method: delete
+          cors: true
+          authorizer:
+            name: authorizerFunc
+            type: request
+
+  journalProcess:
+    handler: functions/journal/process-entry.handler
+    timeout: 30
+    events:
+      - http:
+          path: journal/process
+          method: post
+          cors: true
+          authorizer:
+            name: authorizerFunc
+            type: request
+
+  journalSearch:
+    handler: functions/journal/search.handler
+    timeout: 30
+    events:
+      - http:
+          path: journal/search
+          method: post
+          cors: true
+          authorizer:
+            name: authorizerFunc
+            type: request
+
+  journalContext:
+    handler: functions/journal/context.handler
+    events:
+      - http:
+          path: journal/context
+          method: get
+          cors: true
+          authorizer:
+            name: authorizerFunc
+            type: request
 
   # Authorizer
   authorizerFunc:
@@ -285,6 +400,69 @@ resources:
             KeyType: HASH
           - AttributeName: reminderId
             KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+
+    # Journal Entries Table
+    JournalEntriesTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.JOURNAL_ENTRIES_TABLE}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: entryId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: entryId
+            KeyType: RANGE
+        TimeToLiveSpecification:
+          AttributeName: ttl
+          Enabled: true
+        BillingMode: PAY_PER_REQUEST
+
+    # User Context Table
+    UserContextTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.USER_CONTEXT_TABLE}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: contextType
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: contextType
+            KeyType: RANGE
+        BillingMode: PAY_PER_REQUEST
+
+    # Insight Queue Table
+    InsightQueueTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:provider.environment.INSIGHT_QUEUE_TABLE}
+        AttributeDefinitions:
+          - AttributeName: userId
+            AttributeType: S
+          - AttributeName: taskId
+            AttributeType: S
+          - AttributeName: scheduledFor
+            AttributeType: S
+        KeySchema:
+          - AttributeName: userId
+            KeyType: HASH
+          - AttributeName: taskId
+            KeyType: RANGE
+        GlobalSecondaryIndexes:
+          - IndexName: scheduledFor-index
+            KeySchema:
+              - AttributeName: scheduledFor
+                KeyType: HASH
+            Projection:
+              ProjectionType: ALL
         BillingMode: PAY_PER_REQUEST
 
     # S3 Bucket for photos

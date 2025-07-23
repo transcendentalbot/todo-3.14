@@ -7,26 +7,35 @@ Building a comprehensive wellness tracking PWA that serves as a personal health 
 1. **PRD-Wellness-Companion.md** - Main product requirements document
 2. **PRD-Reminders-Alerts.md** - Detailed notification system design  
 3. **PRD-Phase1-MVP.md** - 10-week implementation plan for MVP
+4. **PRD-Journal-Intelligence.md** - Phase 2 AI-powered journal analysis system
+5. **PRD-Phase2-Journal.md** - 8-week implementation plan for journal intelligence
 
 ## Project Status
-- Currently in planning/specification phase
-- Ready to begin Phase 1 implementation
-- Focus on MVP features first
+- Phase 1 MVP: In development (notifications, encryption, basic tracking implemented)
+- Phase 2 Journal Intelligence: Planned (AI analysis, intelligent notifications)
+- Current focus: Completing Phase 1 MVP features
 
-## Technical Stack (Planned)
-### Frontend
+## Technical Stack
+### Frontend (Implemented)
 - React + TypeScript
 - Vite build tool
 - PWA with Service Workers
 - Web Speech API for voice input
 - Push notifications via FCM
 
-### Backend  
+### Backend (Implemented)
 - AWS Lambda + API Gateway
 - DynamoDB for data storage
 - S3 for photo storage
 - Cognito for authentication
 - EventBridge for scheduled reminders
+- SNS for SMS backup
+
+### Phase 2 Additions (Planned)
+- AWS Bedrock for AI/LLM processing
+- OpenSearch Serverless for semantic search
+- Step Functions for complex workflows
+- Additional DynamoDB tables for journal entries
 
 ## Core Features
 1. **Voice-First Input** - All interactions can be done via voice
@@ -53,12 +62,20 @@ Building a comprehensive wellness tracking PWA that serves as a personal health 
 - Wants to learn what brings fulfillment
 - Interested in mood-activity correlations
 
-## Current Phase: MVP (Phase 1)
-### Week 1-2: Backend Infrastructure
-### Week 3-4: Core PWA Development  
-### Week 5-6: Voice Integration & Notifications
-### Week 7-8: Testing & Polish
-### Week 9-10: Beta Launch
+## Development Phases
+
+### Phase 1: MVP (Weeks 1-10) - In Progress
+- Week 1-2: Backend Infrastructure ✅
+- Week 3-4: Core PWA Development ✅
+- Week 5-6: Voice Integration & Notifications ✅
+- Week 7-8: Testing & Polish (Current)
+- Week 9-10: Beta Launch
+
+### Phase 2: Journal Intelligence (Weeks 11-18) - Planned
+- Week 11-12: Foundation Setup (Database, Bedrock integration)
+- Week 13-14: Intelligence Layer (Embeddings, task detection)
+- Week 15-16: Adaptive System (User profiles, learning)
+- Week 17-18: Polish & Launch
 
 ## Important Constraints
 - Must work offline for basic features

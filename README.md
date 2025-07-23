@@ -4,14 +4,21 @@ A comprehensive PWA-based wellness tracking application that serves as your pers
 
 ## 🌟 Features
 
+### Current (Phase 1)
 - **Voice-First Input**: All interactions can be completed via voice
 - **Daily Mood & Energy Tracking**: Rate your mood and energy levels
 - **Happiness Journaling**: Explore what brings you joy with guided prompts
 - **Photo Documentation**: Capture selfies and meals
 - **Weight & Supplement Tracking**: Quick logging with minimal friction
-- **Smart Reminders**: Context-aware notifications (coming in Phase 2)
+- **Push Notifications**: Timely reminders that work on locked phones
+- **Client-Side Encryption**: Your data is encrypted before leaving your device
 - **Offline Support**: Works without internet connection
 - **Mobile PWA**: Installable on phones with native-like experience
+
+### Coming Soon (Phase 2)
+- **AI Journal Analysis**: Understands emotions and extracts tasks from your entries
+- **Smart Reminders**: Notifications that adapt to your patterns and needs
+- **Contextual Support**: System learns what helps you and when you need it most
 
 ## 🚀 Quick Start
 
@@ -79,17 +86,29 @@ wellness-companion/
 
 ## 📈 Project Status
 
-### ✅ Phase 1 (MVP) - Completed
-- Backend infrastructure
-- Core PWA with tracking features
-- Voice input integration
-- Basic authentication
+### ✅ Phase 1 (MVP) - In Progress
+- Backend infrastructure ✅
+- Core PWA with tracking features ✅
+- Voice input integration ✅
+- Basic authentication ✅
+- Push notifications ✅
+- Client-side encryption ✅
+- Scheduled reminders ✅
+- SMS backup for critical alerts ✅
 
-### 🚧 Phase 2 (Upcoming)
-- Push notifications
-- Advanced analytics
-- Pattern recognition
-- Data export
+### 🚧 Phase 2 (Journal Intelligence) - Planned
+- AI-powered journal analysis using AWS Bedrock
+- Intelligent task and emotion extraction
+- Context-aware adaptive notifications
+- Semantic search across journal entries
+- Pattern recognition for mood and wellness
+- Personalized insights and recommendations
+
+### 🔮 Future Phases
+- Apple Health / Google Fit integration
+- Advanced analytics dashboard
+- Social features and accountability
+- Data export and portability
 
 ## 🤝 Contributing
 

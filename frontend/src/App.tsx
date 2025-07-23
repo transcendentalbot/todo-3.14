@@ -6,6 +6,7 @@ import Register from './screens/Register'
 import Dashboard from './screens/Dashboard'
 import DailyCheckin from './screens/DailyCheckin'
 import QuickLog from './screens/QuickLog'
+import Journal from './screens/Journal'
 import { useEffect } from 'react'
 
 function App() {
@@ -53,6 +54,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <QuickLog />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/journal"
+              element={
+                <ProtectedRoute>
+                  <Journal />
                 </ProtectedRoute>
               }
             />
