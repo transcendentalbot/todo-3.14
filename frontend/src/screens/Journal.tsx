@@ -13,12 +13,6 @@ const Journal: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
 
   useEffect(() => {
-    // Check if encryption is initialized
-    if (!localStorage.getItem('encryption_salt')) {
-      alert('Please log in again to access journal features');
-      navigate('/login');
-      return;
-    }
     loadEntries();
   }, []);
 
@@ -50,9 +44,14 @@ const Journal: React.FC = () => {
       setNewEntry('');
       setShowNewEntry(false);
       await loadEntries();
-    } catch (error) {
+    } catch (error: any) {
       console.error('Failed to save journal entry:', error);
-      alert('Failed to save journal entry');
+      if (error.message?.includes('Encryption not initialized')) {
+        alert('Please log out and log back in to enable journal encryption');
+        navigate('/login');
+      } else {
+        alert('Failed to save journal entry');
+      }
     } finally {
       setIsLoading(false);
     }

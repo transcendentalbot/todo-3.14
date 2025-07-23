@@ -63,10 +63,20 @@ class JournalService {
     
     // Decrypt entries
     const decryptedEntries = await Promise.all(
-      response.data.entries.map(async (entry: any) => ({
-        ...entry,
-        content: await encryptionService.decrypt(entry.encryptedContent)
-      }))
+      response.data.entries.map(async (entry: any) => {
+        try {
+          return {
+            ...entry,
+            content: await encryptionService.decrypt(entry.encryptedContent)
+          };
+        } catch (error) {
+          console.error('Failed to decrypt entry:', error);
+          return {
+            ...entry,
+            content: '[Unable to decrypt - please log in again]'
+          };
+        }
+      })
     );
 
     return {
