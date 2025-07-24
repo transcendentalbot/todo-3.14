@@ -41,21 +41,32 @@ class JournalService {
     };
     console.log('Sending payload:', payload);
 
-    const response = await api.post('/journal/entry', payload);
-    console.log('Journal entry created:', response.data);
-
-    // Process entry with AI in the background
     try {
-      await api.post('/journal/process', {
-        entryId: response.data.entryId,
-        content: data.content
-      });
-    } catch (error) {
-      // Don't fail if processing fails - it's optional
-      console.error('Failed to process journal entry:', error);
-    }
+      const response = await api.post('/journal/entry', payload);
+      console.log('Journal entry created:', response.data);
 
-    return response.data;
+      // Process entry with AI in the background
+      try {
+        await api.post('/journal/process', {
+          entryId: response.data.entryId,
+          content: data.content
+        });
+      } catch (error) {
+        // Don't fail if processing fails - it's optional
+        console.error('Failed to process journal entry:', error);
+      }
+
+      return response.data;
+    } catch (error: any) {
+      console.error('Journal API error:', error);
+      console.error('Error details:', {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        headers: error.response?.headers
+      });
+      throw error;
+    }
   }
 
   async getEntries(limit?: number, lastKey?: string): Promise<{
