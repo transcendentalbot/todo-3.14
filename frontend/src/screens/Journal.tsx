@@ -16,7 +16,13 @@ const Journal: React.FC = () => {
   const [showEncryptionPrompt, setShowEncryptionPrompt] = useState(false);
 
   useEffect(() => {
-    loadEntries();
+    // Check if encryption is initialized before loading entries
+    if (encryptionService.isInitialized()) {
+      loadEntries();
+    } else {
+      // Show encryption prompt if not initialized
+      setShowEncryptionPrompt(true);
+    }
   }, []);
 
   const loadEntries = async () => {
@@ -33,6 +39,11 @@ const Journal: React.FC = () => {
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleEncryptionSuccess = () => {
+    setShowEncryptionPrompt(false);
+    loadEntries();
   };
 
   const saveEntry = async () => {
@@ -305,10 +316,7 @@ const Journal: React.FC = () => {
       {/* Encryption Prompt Modal */}
       {showEncryptionPrompt && (
         <EncryptionPrompt
-          onSuccess={() => {
-            setShowEncryptionPrompt(false);
-            loadEntries();
-          }}
+          onSuccess={handleEncryptionSuccess}
           onCancel={() => {
             setShowEncryptionPrompt(false);
             navigate('/dashboard');
