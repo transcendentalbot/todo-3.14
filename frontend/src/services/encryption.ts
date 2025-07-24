@@ -76,6 +76,12 @@ class EncryptionService {
    * Decrypt data
    */
   async decrypt(encryptedData: string): Promise<string> {
+    // Check if encryptedData is empty or invalid
+    if (!encryptedData || encryptedData.trim() === '') {
+      console.warn('Decrypt called with empty data');
+      return '';
+    }
+
     if (!this.encryptionKey) {
       // Try read-only mode
       this.initializeReadOnly();
@@ -89,16 +95,25 @@ class EncryptionService {
       
       // If decryption results in empty string, it likely failed
       if (!decrypted) {
-        throw new Error('Decryption failed - invalid key');
+        console.error('Decryption failed: empty result from decryption');
+        throw new Error('Decryption failed - invalid key or corrupted data');
+      }
+      
+      // Try to parse as JSON to validate it's properly decrypted
+      try {
+        JSON.parse(decrypted);
+      } catch {
+        // Not JSON, but that's okay - just return the decrypted string
       }
       
       return decrypted;
     } catch (error) {
+      console.error('Decryption failed:', error);
       // If we're in read-only mode, return a placeholder
       if (this.encryptionKey === 'READ_ONLY_KEY') {
         return '[Encrypted content - please log in to view]';
       }
-      throw error;
+      throw new Error('Failed to decrypt data. Invalid key or corrupted data.');
     }
   }
 
