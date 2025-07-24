@@ -1,5 +1,4 @@
 import axios from 'axios'
-import encryptionService from './encryption'
 
 const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:3000/dev'
 
@@ -18,15 +17,6 @@ api.interceptors.request.use(
       config.headers.Authorization = `Bearer ${token}`
     }
     
-    // Encrypt data for tracking endpoints
-    if (config.url?.includes('/tracking/') && config.data && encryptionService.isInitialized()) {
-      const timestamp = config.data.timestamp || Date.now()
-      const encryptedData = encryptionService.encrypt(config.data)
-      config.data = {
-        timestamp,
-        encryptedData
-      }
-    }
     
     return config
   },
@@ -38,39 +28,11 @@ api.interceptors.request.use(
 // Response interceptor for error handling and decryption
 api.interceptors.response.use(
   (response) => {
-    // Decrypt data from tracking endpoints
-    if (response.config.url?.includes('/tracking/') && response.data?.encryptedData && encryptionService.isInitialized()) {
-      try {
-        response.data = encryptionService.decrypt(response.data.encryptedData)
-      } catch (err) {
-        console.error('Failed to decrypt response:', err)
-      }
-    }
-    
-    // Handle array of encrypted items (e.g., history)
-    if (response.config.url?.includes('/tracking/history') && Array.isArray(response.data) && encryptionService.isInitialized()) {
-      response.data = response.data.map(item => {
-        if (item.encryptedData) {
-          try {
-            return {
-              ...item,
-              data: encryptionService.decrypt(item.encryptedData)
-            }
-          } catch (err) {
-            console.error('Failed to decrypt item:', err)
-            return item
-          }
-        }
-        return item
-      })
-    }
-    
     return response
   },
   (error) => {
     if (error.response?.status === 401) {
       localStorage.removeItem('token')
-      encryptionService.clear()
       window.location.href = '/login'
     }
     return Promise.reject(error)

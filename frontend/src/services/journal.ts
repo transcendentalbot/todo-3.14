@@ -1,5 +1,4 @@
 import { api } from './api';
-import encryptionService from './encryption';
 
 export interface JournalEntry {
   entryId: string;
@@ -28,11 +27,8 @@ class JournalService {
   async createEntry(data: CreateJournalEntryData): Promise<{ entryId: string; createdAt: string }> {
     console.log('Creating journal entry:', { contentLength: data.content.length });
     
-    const encryptedContent = await encryptionService.encrypt(data.content);
-    console.log('Encrypted content length:', encryptedContent.length);
-    
     const payload = {
-      encryptedContent,
+      content: data.content,
       metadata: {
         ...data.metadata,
         wordCount: data.content.split(/\s+/).filter(word => word.length > 0).length,
@@ -79,26 +75,11 @@ class JournalService {
 
     const response = await api.get('/journal/entries', { params });
     
-    // Decrypt entries
-    const decryptedEntries = await Promise.all(
-      response.data.entries.map(async (entry: any) => {
-        try {
-          return {
-            ...entry,
-            content: await encryptionService.decrypt(entry.encryptedContent)
-          };
-        } catch (error) {
-          console.error('Failed to decrypt entry:', error);
-          return {
-            ...entry,
-            content: '[Unable to decrypt - please log in again]'
-          };
-        }
-      })
-    );
+    // Entries are already decrypted by the backend
+    const entries = response.data.entries;
 
     return {
-      entries: decryptedEntries,
+      entries,
       lastKey: response.data.lastKey
     };
   }
@@ -106,17 +87,12 @@ class JournalService {
   async getEntry(entryId: string): Promise<JournalEntry> {
     const response = await api.get(`/journal/entry/${entryId}`);
     
-    return {
-      ...response.data,
-      content: await encryptionService.decrypt(response.data.encryptedContent)
-    };
+    return response.data;
   }
 
   async updateEntry(entryId: string, content: string, metadata?: any): Promise<void> {
-    const encryptedContent = await encryptionService.encrypt(content);
-    
     await api.put(`/journal/entry/${entryId}`, {
-      encryptedContent,
+      content,
       metadata: {
         ...metadata,
         wordCount: content.split(/\s+/).filter(word => word.length > 0).length,
@@ -137,15 +113,7 @@ class JournalService {
         threshold: 0.6
       });
       
-      // Decrypt search results
-      const decryptedEntries = await Promise.all(
-        response.data.entries.map(async (entry: any) => ({
-          ...entry,
-          content: await encryptionService.decrypt(entry.encryptedContent)
-        }))
-      );
-      
-      return decryptedEntries;
+      return response.data.entries;
     } catch (error) {
       console.error('Search failed, falling back to local search:', error);
       

@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import VoiceInput from '../components/VoiceInput';
-import EncryptionPrompt from '../components/EncryptionPrompt';
 import { journalService, type JournalEntry } from '../services/journal';
-import encryptionService from '../services/encryption';
 
 const Journal: React.FC = () => {
   const navigate = useNavigate();
@@ -13,16 +11,8 @@ const Journal: React.FC = () => {
   const [selectedEntry, setSelectedEntry] = useState<JournalEntry | null>(null);
   const [showNewEntry, setShowNewEntry] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');
-  const [showEncryptionPrompt, setShowEncryptionPrompt] = useState(false);
-
   useEffect(() => {
-    // Check if encryption is initialized before loading entries
-    if (encryptionService.isInitialized()) {
-      loadEntries();
-    } else {
-      // Show encryption prompt if not initialized
-      setShowEncryptionPrompt(true);
-    }
+    loadEntries();
   }, []);
 
   const loadEntries = async () => {
@@ -32,19 +22,11 @@ const Journal: React.FC = () => {
       setEntries(entries);
     } catch (error: any) {
       console.error('Failed to load journal entries:', error);
-      // Check if encryption is not initialized
-      if (error.message?.includes('Encryption not initialized') && !encryptionService.isInitialized()) {
-        setShowEncryptionPrompt(true);
-      }
     } finally {
       setIsLoading(false);
     }
   };
 
-  const handleEncryptionSuccess = () => {
-    setShowEncryptionPrompt(false);
-    loadEntries();
-  };
 
   const saveEntry = async () => {
     if (!newEntry.trim()) return;
@@ -64,11 +46,7 @@ const Journal: React.FC = () => {
       await loadEntries();
     } catch (error: any) {
       console.error('Failed to save journal entry:', error);
-      if (error.message?.includes('Encryption not initialized') && !encryptionService.isInitialized()) {
-        setShowEncryptionPrompt(true);
-      } else {
-        alert('Failed to save journal entry');
-      }
+      alert('Failed to save journal entry');
     } finally {
       setIsLoading(false);
     }
@@ -313,16 +291,6 @@ const Journal: React.FC = () => {
         </div>
       )}
 
-      {/* Encryption Prompt Modal */}
-      {showEncryptionPrompt && (
-        <EncryptionPrompt
-          onSuccess={handleEncryptionSuccess}
-          onCancel={() => {
-            setShowEncryptionPrompt(false);
-            navigate('/dashboard');
-          }}
-        />
-      )}
     </div>
   );
 };

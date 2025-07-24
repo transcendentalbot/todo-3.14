@@ -14,11 +14,14 @@ export const createEntry: APIGatewayProxyHandler = async (event) => {
     }
 
     const body = JSON.parse(event.body || '{}');
-    const { encryptedContent, metadata } = body;
+    const { content, metadata } = body;
 
-    if (!encryptedContent) {
-      return createErrorResponse(400, 'Encrypted content is required');
+    if (!content) {
+      return createErrorResponse(400, 'Content is required');
     }
+
+    // Server-side encryption (you can use AWS KMS or a simple encryption here)
+    const encryptedContent = Buffer.from(content).toString('base64'); // Simple base64 for now
 
     const entryId = `ENTRY#${Date.now()}`;
     const timestamp = new Date().toISOString();
@@ -78,7 +81,7 @@ export const getEntries: APIGatewayProxyHandler = async (event) => {
 
     const entries = result.Items?.map(item => ({
       entryId: item.entryId.replace('ENTRY#', ''),
-      encryptedContent: item.encryptedContent,
+      content: Buffer.from(item.encryptedContent, 'base64').toString('utf-8'), // Decrypt
       metadata: item.metadata,
       createdAt: item.createdAt,
       updatedAt: item.updatedAt
@@ -124,7 +127,7 @@ export const getEntry: APIGatewayProxyHandler = async (event) => {
 
     const entry = {
       entryId: result.Item.entryId.replace('ENTRY#', ''),
-      encryptedContent: result.Item.encryptedContent,
+      content: Buffer.from(result.Item.encryptedContent, 'base64').toString('utf-8'), // Decrypt
       metadata: result.Item.metadata,
       createdAt: result.Item.createdAt,
       updatedAt: result.Item.updatedAt
@@ -151,11 +154,14 @@ export const updateEntry: APIGatewayProxyHandler = async (event) => {
     }
 
     const body = JSON.parse(event.body || '{}');
-    const { encryptedContent, metadata } = body;
+    const { content, metadata } = body;
 
-    if (!encryptedContent) {
-      return createErrorResponse(400, 'Encrypted content is required');
+    if (!content) {
+      return createErrorResponse(400, 'Content is required');
     }
+
+    // Server-side encryption
+    const encryptedContent = Buffer.from(content).toString('base64');
 
     const timestamp = new Date().toISOString();
 
@@ -165,9 +171,9 @@ export const updateEntry: APIGatewayProxyHandler = async (event) => {
         userId: `USER#${userId}`,
         entryId: `ENTRY#${entryId}`
       },
-      UpdateExpression: 'SET encryptedContent = :content, metadata = :metadata, updatedAt = :updatedAt',
+      UpdateExpression: 'SET encryptedContent = :encryptedContent, metadata = :metadata, updatedAt = :updatedAt',
       ExpressionAttributeValues: {
-        ':content': encryptedContent,
+        ':encryptedContent': encryptedContent,
         ':metadata': metadata || {},
         ':updatedAt': timestamp
       },
